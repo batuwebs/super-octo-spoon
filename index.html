@@ -2,48 +2,218 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BatuWebs Premium Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BatuWebs Elite Panel</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: white; text-align: center; padding: 20px; }
-        .profile-card { background: #1a1a1a; border-radius: 20px; padding: 20px; border: 1px solid #f1c40f; margin-bottom: 20px; }
-        .avatar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #f1c40f; margin-bottom: 10px; }
-        .limit-bar { background: #333; height: 10px; border-radius: 5px; margin: 15px 0; overflow: hidden; }
-        .limit-fill { background: #f1c40f; height: 100%; width: 0%; transition: 1s; }
-        .info { font-size: 0.9em; color: #aaa; }
-        .premium-tag { color: #f1c40f; font-weight: bold; }
+        :root {
+            --primary-gold: #f1c40f;
+            --bg-dark: #09090b;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            margin: 0;
+            padding: 16px;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Üst Profil Kartı */
+        .profile-section {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .avatar-container { position: relative; }
+        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary-gold); padding: 2px; }
+        .status-dot { width: 12px; height: 12px; background: #2ecc71; border: 2px solid var(--bg-dark); border-radius: 50%; position: absolute; bottom: 5px; right: 5px; }
+
+        .user-info h2 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+        .user-info p { margin: 2px 0 0; font-size: 0.8rem; color: #888; }
+
+        /* Limit ve İlerleme Çubuğu */
+        .limit-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .limit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .limit-title { font-size: 0.85rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
+        .limit-value { color: var(--primary-gold); font-weight: bold; }
+
+        .progress-container { background: #222; height: 8px; border-radius: 4px; overflow: hidden; }
+        .progress-bar { background: var(--primary-gold); height: 100%; width: 0%; transition: width 1.5s cubic-bezier(0.1, 0.7, 1.0, 0.1); box-shadow: 0 0 10px rgba(241, 196, 15, 0.4); }
+
+        /* Bildirim Bannerları */
+        .notification {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid #3498db;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* Ayar Izgarası */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 80px;
+        }
+
+        .grid-item {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 15px;
+            text-align: left;
+            transition: transform 0.2s;
+        }
+
+        .grid-item:active { transform: scale(0.95); }
+        .grid-item i { font-size: 1.5rem; color: var(--primary-gold); margin-bottom: 10px; display: block; }
+        .grid-item span { font-size: 0.9rem; font-weight: 600; display: block; }
+        .grid-item small { font-size: 0.7rem; color: #666; }
+
+        /* Alt Navigasyon */
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .nav-item { color: #555; font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: var(--primary-gold); text-shadow: 0 0 8px var(--primary-gold); }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
-    <div class="profile-card">
-        <img id="user-pic" class="avatar" src="https://via.placeholder.com/80) " alt="Profil">
-        <h2 id="user-name">Yükleniyor...</h2>
-        <p class="info">ID: <span id="user-id">000000</span></p>
-        <hr style="border: 0.1px solid #333;">
-        <p>Üyelik Durumu: <span id="status" class="premium-tag">Kontrol Ediliyor...</span></p>
-        <div class="limit-bar"><div id="bar" class="limit-fill"></div></div>
-        <p id="days-left" class="info">Kalan Gün: --</p>
+
+    <div class="profile-section">
+        <div class="avatar-container">
+            <img id="u_photo" src="https://via.placeholder.com/100" class="avatar">
+            <div class="status-dot"></div>
+        </div>
+        <div class="user-info">
+            <h2 id="u_name">Müşteri</h2>
+            <p id="u_id">ID: 00000000</p>
+            <p class="premium-tag" id="u_status"><i class="fas fa-crown"></i> STANDART ÜYE</p>
+        </div>
+    </div>
+
+    <div class="notification">
+        <i class="fas fa-info-circle"></i>
+        <span>Sistem güncellendi. Yeni projeler eklendi!</span>
+    </div>
+
+    <div class="limit-card">
+        <div class="limit-header">
+            <span class="limit-title">Premium Kullanım Hakkı</span>
+            <span class="limit-value" id="u_days">0 Gün</span>
+        </div>
+        <div class="progress-container">
+            <div id="u_bar" class="progress-bar"></div>
+        </div>
+        <p style="font-size: 0.7rem; color: #555; margin-top: 10px;">Limit bittiğinde otomatik olarak ücretsiz sürüme geçersiniz.</p>
+    </div>
+
+    <div class="grid-container">
+        <div class="grid-item" onclick="tgAction('Instagram Projesi')">
+            <i class="fab fa-instagram"></i>
+            <span>Instagram Pro</span>
+            <small>Aktif & Güvenli</small>
+        </div>
+        <div class="grid-item" onclick="tgAction('Analiz Sistemi')">
+            <i class="fas fa-chart-line"></i>
+            <span>Analiz</span>
+            <small>Gerçek Zamanlı</small>
+        </div>
+        <div class="grid-item" onclick="tgAction('Ayarlar')">
+            <i class="fas fa-cog"></i>
+            <span>Ayarlar</span>
+            <small>Hesap Yönetimi</small>
+        </div>
+        <div class="grid-item" onclick="tgAction('Destek')">
+            <i class="fas fa-headset"></i>
+            <span>Destek</span>
+            <small>7/24 Aktif</small>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active"><i class="fas fa-home"></i></div>
+        <div class="nav-item" onclick="tgAction('Keşfet')"><i class="fas fa-compass"></i></div>
+        <div class="nav-item" onclick="tgAction('Cüzdan')"><i class="fas fa-wallet"></i></div>
+        <div class="nav-item" onclick="tgAction('Profil')"><i class="fas fa-user"></i></div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
+        tg.ready();
         tg.expand();
-        
-        // Telegram verilerini çek
-        const user = tg.initDataUnsafe.user;
-        document.getElementById('user-name').innerText = user.first_name + " " + (user.last_name || "");
-        document.getElementById('user-id').innerText = user.id;
-        if(user.photo_url) document.getElementById('user-pic').src = user.photo_url;
 
-        // URL'den gelen VIP bilgilerini yakala
-        const urlParams = new URLSearchParams(window.location.search);
-        const days = urlParams.get('days') || 0;
-        const total = 30; // Toplam limit
+        // Renk şemasını Telegram'a uydur
+        document.body.style.backgroundColor = tg.backgroundColor || "#09090b";
+
+        // Kullanıcı verilerini bas
+        const user = tg.initDataUnsafe.user;
+        if(user) {
+            document.getElementById('u_name').innerText = user.first_name;
+            document.getElementById('u_id').innerText = "ID: " + user.id;
+            if(user.photo_url) document.getElementById('u_photo').src = user.photo_url;
+        }
+
+        // Python'dan gelen URL parametrelerini işle
+        const params = new URLSearchParams(window.location.search);
+        const days = parseInt(params.get('days')) || 0;
         
-        document.getElementById('days-left').innerText = "Kalan Gün: " + days;
-        document.getElementById('status').innerText = days > 0 ? "🌟 GOLD" : "🆓 ÜCRETSİZ";
-        document.getElementById('bar').style.width = (days / total * 100) + "%";
+        document.getElementById('u_days').innerText = days + " Gün";
+        if(days > 0) {
+            document.getElementById('u_status').innerHTML = '<i class="fas fa-crown"></i> ELITE ÜYE';
+            document.getElementById('u_status').style.color = "#f1c40f";
+            // Barı %30 gün üzerinden hesapla (Örn: 30 gün = %100)
+            let percent = (days / 30) * 100;
+            setTimeout(() => {
+                document.getElementById('u_bar').style.width = percent + "%";
+            }, 500);
+        }
+
+        function tgAction(name) {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.showConfirm(name + " modülü açılsın mı?");
+        }
     </script>
 </body>
 </html>
