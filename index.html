@@ -6,51 +6,100 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* iOS Pro Tasarım Değişkenleri */
-        :root { --blue: #007AFF; --bg: #000; --card: #1C1C1E; --gold: #FFD60A; }
-        body { background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; padding: 20px 16px; margin: 0; }
+        :root { --blue: #0A84FF; --bg: #000; --card: #1C1C1E; --gray: #8E8E93; --red: #FF453A; --gold: #FFD60A; }
+        body { background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 20px 16px env(safe-area-inset-bottom); }
         
-        .header h1 { font-size: 34px; letter-spacing: -1px; margin: 0; }
-        .status-widget { 
-            background: var(--card); border-radius: 22px; padding: 18px; 
-            display: flex; align-items: center; justify-content: space-between; 
-            margin: 20px 0; border: 0.5px solid #38383A;
-        }
-        .badge-admin { background: #FF3B30; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 800; }
-        .badge-vip { background: rgba(255, 214, 10, 0.2); color: var(--gold); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
-        
-        .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .app-card { 
-            background: var(--card); border-radius: 24px; padding: 20px; 
-            border: 0.5px solid #38383A; transition: 0.2s;
-        }
-        .app-card:active { transform: scale(0.9); }
-        .icon { width: 40px; height: 40px; border-radius: 10px; background: #2C2C2E; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 20px; color: var(--gold); }
+        /* Limit Header */
+        .limit-header { background: var(--card); border-radius: 15px; padding: 12px; margin-bottom: 20px; text-align: center; border: 0.5px solid #333; }
+        .limit-header span { color: var(--blue); font-weight: bold; }
+
+        /* Icon Grid (Top Actions) */
+        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .top-card { background: var(--card); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 0.5px solid #333; }
+        .top-card i { font-size: 24px; color: var(--gold); }
+        .top-card span { font-size: 13px; font-weight: 600; text-align: center; }
+
+        /* Admin Panel Modal */
+        #admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 1000; padding: 20px; overflow-y: auto; }
+        .admin-section { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; }
+        .admin-input { width: 100%; background: #2C2C2E; border: none; padding: 12px; border-radius: 10px; color: #fff; margin: 8px 0; }
+        .admin-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: bold; margin-top: 5px; }
+
+        /* Main Modules */
+        .module-list { display: flex; flex-direction: column; gap: 10px; }
+        .module-item { background: var(--card); padding: 18px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; border: 0.5px solid #333; text-decoration: none; color: white; }
+        .module-info { display: flex; align-items: center; gap: 15px; }
+        .module-info i { width: 35px; height: 35px; background: #2C2C2E; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--blue); }
+        .module-item:active { background: #2C2C2E; transform: scale(0.98); }
+
+        .chevron { color: var(--gray); font-size: 14px; }
+        .locked { opacity: 0.5; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1 id="welcome">BatuWebs</h1>
+    <div class="limit-header">
+        GÜNLÜK KULLANIM HAKKI: <span id="limit-text">3 / 3</span>
     </div>
 
-    <div class="status-widget">
-        <div style="display:flex; align-items:center; gap:12px;">
-            <div id="u_avatar" style="width:44px; height:44px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-weight:bold;">B</div>
-            <div>
-                <div id="u_name" style="font-weight:600;">Admin</div>
-                <div id="u_limit" style="font-size:12px; color:#8E8E93;">Sınırsız Erişim</div>
-            </div>
+    <div class="top-grid">
+        <div id="admin-icon" class="top-card" style="display:none;" onclick="toggleAdmin(true)">
+            <i class="fas fa-user-shield"></i>
+            <span>YÖNETİM PANELİ</span>
         </div>
-        <div id="u_status" class="badge-vip">ELITE</div>
+        <div class="top-card" onclick="showProfile()">
+            <i class="fas fa-address-card"></i>
+            <span>ÜYELİK DURUMU</span>
+        </div>
     </div>
 
-    <div class="app-grid">
-        <div class="app-card" onclick="run('Analiz')"><div class="icon"><i class="fas fa-bolt"></i></div><span>Hızlı Analiz</span></div>
-        <div class="app-card" onclick="run('Güvenlik')"><div class="icon"><i class="fas fa-shield"></i></div><span>Güvenlik</span></div>
-        <div class="app-card" onclick="run('Proxy')"><div class="icon"><i class="fas fa-server"></i></div><span>Proxy</span></div>
-        <div id="admin_btn" class="app-card" style="display:none; border-color: #FF3B30;" onclick="run('Admin Panel')">
-            <div class="icon" style="color:#FF3B30;"><i class="fas fa-crown"></i></div><span>Yönetim</span>
+    <div class="module-list">
+        <a href="belge.html" class="module-item">
+            <div class="module-info">
+                <i class="fas fa-file-invoice"></i>
+                <span>KARNE OLUŞTURUCU</span>
+            </div>
+            <i class="fas fa-chevron-right chevron"></i>
+        </a>
+
+        <script>
+            for(let i=0; i<6; i++) {
+                document.write(`
+                <a href="soon.html" class="module-item locked">
+                    <div class="module-info">
+                        <i class="fas fa-layer-group"></i>
+                        <span>ÇOK YAKINDA</span>
+                    </div>
+                    <i class="fas fa-lock chevron"></i>
+                </a>
+                `);
+            }
+        </script>
+    </div>
+
+    <div id="admin-modal">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2>Yönetim Merkezi</h2>
+            <button onclick="toggleAdmin(false)" style="background:none; border:none; color:var(--blue); font-weight:bold;">Kapat</button>
+        </div>
+        
+        <div class="admin-section">
+            <h3>VIP İşlemleri</h3>
+            <input type="text" id="vip_id" class="admin-input" placeholder="Kullanıcı ID">
+            <button class="admin-btn" style="background:var(--gold); color:#000;" onclick="adminAction('VIP Ekle')">VIP Ekle</button>
+            <button class="admin-btn" style="background:var(--red); color:#fff;" onclick="adminAction('VIP Sil')">VIP İptal</button>
+        </div>
+
+        <div class="admin-section">
+            <h3>Kullanıcı Kontrol</h3>
+            <input type="text" id="ban_id" class="admin-input" placeholder="Kullanıcı ID">
+            <button class="admin-btn" style="background:#444; color:#fff;" onclick="adminAction('Banla')">Erişimi Yasakla</button>
+        </div>
+
+        <div class="admin-section">
+            <h3>Admin Yönetimi</h3>
+            <input type="text" id="new_admin_id" class="admin-input" placeholder="Yeni Admin ID">
+            <button class="admin-btn" style="background:var(--blue); color:#fff;" onclick="adminAction('Admin Ekle')">Admin Yetkisi Ver</button>
         </div>
     </div>
 
@@ -59,45 +108,38 @@
         tg.expand();
 
         const params = new URLSearchParams(window.location.search);
+        const myId = "8795833691";
         const userId = params.get('id');
-        const isVip = params.get('vip') === '1';
-        const myId = "8795833691"; // Senin ID'n
+        const isVip = params.get('vip') === '1' || userId === myId;
 
-        // --- GOD MODE KONTROLÜ ---
-        const isAdmin = (userId === myId);
-
-        if (isAdmin) {
-            document.getElementById('u_name').innerText = "KURUCU";
-            document.getElementById('u_status').className = "badge-admin";
-            document.getElementById('u_status').innerText = "GOD MODE";
-            document.getElementById('u_limit').innerText = "Limit Devre Dışı";
-            document.getElementById('admin_btn').style.display = "block";
-            document.getElementById('u_avatar').style.background = "#FF3B30";
+        // Admin Kontrolü
+        if (userId === myId) {
+            document.getElementById('admin-icon').style.display = 'flex';
+            document.getElementById('limit-text').innerText = "SINIRSIZ";
         } else if (isVip) {
-            document.getElementById('u_status').innerText = "ELITE VIP";
-            document.getElementById('u_limit').innerText = "Sınırsız Erişim";
+            document.getElementById('limit-text').innerText = "SINIRSIZ (VIP)";
+        } else {
+            let clicks = localStorage.getItem('clicks_v7') || 0;
+            document.getElementById('limit-text').innerText = (3 - clicks) + " / 3";
         }
 
-        let clicks = parseInt(localStorage.getItem('b_clicks') || "0");
-        if (!isAdmin && !isVip) document.getElementById('u_limit').innerText = `Kalan Hak: ${2 - clicks}`;
+        function toggleAdmin(show) {
+            tg.HapticFeedback.impactOccurred('medium');
+            document.getElementById('admin-modal').style.display = show ? 'block' : 'none';
+        }
 
-        function run(name) {
-            tg.HapticFeedback.impactOccurred('heavy');
-            
-            // Eğer adminse veya vip ise limit sorgulama, direkt çalıştır
-            if (isAdmin || isVip) {
-                tg.showPopup({ title: 'Başlatıldı', message: name + ' modülü açıldı.', buttons: [{type: 'ok'}] });
-                return;
-            }
+        function showProfile() {
+            tg.showPopup({
+                title: 'Üyelik Bilgileri',
+                message: `ID: ${userId}\nStatü: ${isVip ? 'VIP / Admin' : 'Standart'}\nKayıt: Aktif sistem üyesi`,
+                buttons: [{type: 'ok'}]
+            });
+        }
 
-            if (clicks >= 2) {
-                tg.showPopup({ title: 'Limit!', message: 'Hakların bitti AMK. VIP al!', buttons: [{type: 'close'}] });
-                return;
-            }
-
-            clicks++;
-            localStorage.setItem('b_clicks', clicks);
-            location.reload();
+        function adminAction(action) {
+            tg.showConfirm(`${action} işlemini onaylıyor musunuz?`, (ok) => {
+                if(ok) tg.showAlert("İşlem bot üzerinden başarıyla gerçekleştirildi.");
+            });
         }
     </script>
 </body>
