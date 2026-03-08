@@ -5,214 +5,227 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BatuWebs Elite Panel</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-gold: #f1c40f;
-            --bg-dark: #09090b;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --gold: #f1c40f;
+            --dark-bg: #09090b;
+            --card-bg: #121214;
+            --border: #27272a;
+            --text-gray: #a1a1aa;
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-dark);
+            background-color: var(--dark-bg);
             color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
             overflow-x: hidden;
-            user-select: none;
         }
 
-        /* Üst Profil Kartı */
-        .profile-section {
-            background: linear-gradient(135deg, rgba(241, 196, 15, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .avatar-container { position: relative; }
-        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary-gold); padding: 2px; }
-        .status-dot { width: 12px; height: 12px; background: #2ecc71; border: 2px solid var(--bg-dark); border-radius: 50%; position: absolute; bottom: 5px; right: 5px; }
-
-        .user-info h2 { margin: 0; font-size: 1.2rem; font-weight: 700; }
-        .user-info p { margin: 2px 0 0; font-size: 0.8rem; color: #888; }
-
-        /* Limit ve İlerleme Çubuğu */
-        .limit-card {
+        /* Üst Bilgi Kartı */
+        .status-card {
             background: var(--card-bg);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 20px;
-        }
-
-        .limit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .limit-title { font-size: 0.85rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
-        .limit-value { color: var(--primary-gold); font-weight: bold; }
-
-        .progress-container { background: #222; height: 8px; border-radius: 4px; overflow: hidden; }
-        .progress-bar { background: var(--primary-gold); height: 100%; width: 0%; transition: width 1.5s cubic-bezier(0.1, 0.7, 1.0, 0.1); box-shadow: 0 0 10px rgba(241, 196, 15, 0.4); }
-
-        /* Bildirim Bannerları */
-        .notification {
-            background: rgba(52, 152, 219, 0.1);
-            border-left: 4px solid #3498db;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            padding: 20px;
             margin-bottom: 20px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            animation: slideIn 0.5s ease-out;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* Ayar Izgarası */
-        .grid-container {
+        .user-info h2 { margin: 0; font-size: 18px; color: var(--gold); }
+        .user-info p { margin: 4px 0 0; font-size: 12px; color: var(--text-gray); }
+
+        .badge {
+            background: rgba(241, 196, 15, 0.1);
+            color: var(--gold);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 1px solid rgba(241, 196, 15, 0.2);
+        }
+
+        /* Ana Menü Izgarası */
+        .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             margin-bottom: 80px;
         }
 
-        .grid-item {
+        .menu-item {
             background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 15px;
-            text-align: left;
-            transition: transform 0.2s;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 12px;
+            text-align: center;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
 
-        .grid-item:active { transform: scale(0.95); }
-        .grid-item i { font-size: 1.5rem; color: var(--primary-gold); margin-bottom: 10px; display: block; }
-        .grid-item span { font-size: 0.9rem; font-weight: 600; display: block; }
-        .grid-item small { font-size: 0.7rem; color: #666; }
+        .menu-item:active {
+            transform: scale(0.96);
+            background: #1c1c1f;
+            border-color: var(--gold);
+        }
+
+        .menu-item i {
+            font-size: 28px;
+            color: var(--gold);
+            filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.3));
+        }
+
+        .menu-item span {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-item .tag {
+            font-size: 9px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+        }
 
         /* Alt Navigasyon */
-        .nav-bar {
+        .bottom-nav {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            background: rgba(20, 20, 20, 0.8);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
+            background: rgba(18, 18, 20, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
             display: flex;
             justify-content: space-around;
             padding: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
         }
 
-        .nav-item { color: #555; font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
-        .nav-item.active { color: var(--primary-gold); text-shadow: 0 0 8px var(--primary-gold); }
+        .nav-link { color: var(--text-gray); font-size: 20px; transition: 0.3s; }
+        .nav-link.active { color: var(--gold); }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        /* Kilitli Özellik Efekti */
+        .locked { opacity: 0.6; position: relative; }
+        .locked::after {
+            content: "\f023";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 10px;
+            color: var(--text-gray);
+        }
     </style>
 </head>
 <body>
 
-    <div class="profile-section">
-        <div class="avatar-container">
-            <img id="u_photo" src="https://via.placeholder.com/100" class="avatar">
-            <div class="status-dot"></div>
-        </div>
+    <div class="status-card">
         <div class="user-info">
-            <h2 id="u_name">Müşteri</h2>
-            <p id="u_id">ID: 00000000</p>
-            <p class="premium-tag" id="u_status"><i class="fas fa-crown"></i> STANDART ÜYE</p>
+            <h2 id="u_name">Hoş Geldin!</h2>
+            <p id="u_days">Kullanım hakkı sorgulanıyor...</p>
         </div>
+        <div id="u_badge" class="badge">SORGULANIYOR</div>
     </div>
 
-    <div class="notification">
-        <i class="fas fa-info-circle"></i>
-        <span>Sistem güncellendi. Yeni projeler eklendi!</span>
-    </div>
+    <div class="grid">
+        <div class="menu-item" onclick="handleAction('Belge Oluşturucu')">
+            <i class="fas fa-file-contract"></i>
+            <span>BELGE OLUŞTUR</span>
+            <div class="tag">AKTİF</div>
+        </div>
+        
+        <div class="menu-item locked" onclick="handleAction('Hesap Analizi')">
+            <i class="fas fa-chart-pie"></i>
+            <span>ANALİZ ARAÇLARI</span>
+            <div class="tag">VIP GEREKLİ</div>
+        </div>
 
-    <div class="limit-card">
-        <div class="limit-header">
-            <span class="limit-title">Premium Kullanım Hakkı</span>
-            <span class="limit-value" id="u_days">0 Gün</span>
+        <div class="menu-item locked" onclick="handleAction('Proxy Yönetimi')">
+            <i class="fas fa-network-wired"></i>
+            <span>PROXY LİSTESİ</span>
+            <div class="tag">VIP GEREKLİ</div>
         </div>
-        <div class="progress-container">
-            <div id="u_bar" class="progress-bar"></div>
-        </div>
-        <p style="font-size: 0.7rem; color: #555; margin-top: 10px;">Limit bittiğinde otomatik olarak ücretsiz sürüme geçersiniz.</p>
-    </div>
 
-    <div class="grid-container">
-        <div class="grid-item" onclick="tgAction('Instagram Projesi')">
-            <i class="fab fa-instagram"></i>
-            <span>Instagram Pro</span>
-            <small>Aktif & Güvenli</small>
+        <div class="menu-item locked" onclick="handleAction('Tasarım Modülü')">
+            <i class="fas fa-wand-magic-sparkles"></i>
+            <span>TASARIM YAP</span>
+            <div class="tag">ÇOK YAKINDA</div>
         </div>
-        <div class="grid-item" onclick="tgAction('Analiz Sistemi')">
-            <i class="fas fa-chart-line"></i>
-            <span>Analiz</span>
-            <small>Gerçek Zamanlı</small>
+
+        <div class="menu-item locked" onclick="handleAction('Sistem Ayarları')">
+            <i class="fas fa-sliders"></i>
+            <span>AYARLAR</span>
+            <div class="tag">GÜNCELLEME</div>
         </div>
-        <div class="grid-item" onclick="tgAction('Ayarlar')">
-            <i class="fas fa-cog"></i>
-            <span>Ayarlar</span>
-            <small>Hesap Yönetimi</small>
-        </div>
-        <div class="grid-item" onclick="tgAction('Destek')">
+
+        <div class="menu-item" onclick="handleAction('Canlı Destek')">
             <i class="fas fa-headset"></i>
-            <span>Destek</span>
-            <small>7/24 Aktif</small>
+            <span>CANLI DESTEK</span>
+            <div class="tag">7/24 YARDIM</div>
         </div>
     </div>
 
-    <div class="nav-bar">
-        <div class="nav-item active"><i class="fas fa-home"></i></div>
-        <div class="nav-item" onclick="tgAction('Keşfet')"><i class="fas fa-compass"></i></div>
-        <div class="nav-item" onclick="tgAction('Cüzdan')"><i class="fas fa-wallet"></i></div>
-        <div class="nav-item" onclick="tgAction('Profil')"><i class="fas fa-user"></i></div>
+    <div class="bottom-nav">
+        <i class="fas fa-house nav-link active"></i>
+        <i class="fas fa-crown nav-link" onclick="handleAction('VIP Bilgi')"></i>
+        <i class="fas fa-wallet nav-item nav-link" onclick="handleAction('Bakiye')"></i>
+        <i class="fas fa-user-circle nav-link" onclick="handleAction('Profil')"></i>
     </div>
 
     <script>
+        // Telegram WebApp Başlatma
         let tg = window.Telegram.WebApp;
+        tg.expand(); // Ekranı tam boy yap
         tg.ready();
-        tg.expand();
 
-        // Renk şemasını Telegram'a uydur
-        document.body.style.backgroundColor = tg.backgroundColor || "#09090b";
+        // Parametreleri Çek (Botun gönderdiği linkten)
+        const urlParams = new URLSearchParams(window.location.search);
+        const isVip = urlParams.get('vip') === '1';
+        const days = urlParams.get('days') || '0';
+        const userId = urlParams.get('id');
 
-        // Kullanıcı verilerini bas
-        const user = tg.initDataUnsafe.user;
-        if(user) {
-            document.getElementById('u_name').innerText = user.first_name;
-            document.getElementById('u_id').innerText = "ID: " + user.id;
-            if(user.photo_url) document.getElementById('u_photo').src = user.photo_url;
+        // UI Güncelleme
+        document.getElementById('u_badge').innerText = isVip ? 'ELITE VIP' : 'STANDART';
+        document.getElementById('u_days').innerText = days + ' Günlük Kullanım Hakkı';
+        if(tg.initDataUnsafe.user) {
+            document.getElementById('u_name').innerText = "Selam, " + tg.initDataUnsafe.user.first_name;
         }
 
-        // Python'dan gelen URL parametrelerini işle
-        const params = new URLSearchParams(window.location.search);
-        const days = parseInt(params.get('days')) || 0;
-        
-        document.getElementById('u_days').innerText = days + " Gün";
-        if(days > 0) {
-            document.getElementById('u_status').innerHTML = '<i class="fas fa-crown"></i> ELITE ÜYE';
-            document.getElementById('u_status').style.color = "#f1c40f";
-            // Barı %30 gün üzerinden hesapla (Örn: 30 gün = %100)
-            let percent = (days / 30) * 100;
-            setTimeout(() => {
-                document.getElementById('u_bar').style.width = percent + "%";
-            }, 500);
-        }
-
-        function tgAction(name) {
-            tg.HapticFeedback.impactOccurred('medium');
-            tg.showConfirm(name + " modülü açılsın mı?");
+        // Aksiyon Yönetimi
+        function handleAction(name) {
+            tg.HapticFeedback.impactOccurred('medium'); // Titreşim desteği
+            
+            if (!isVip && name !== 'Belge Oluşturucu' && name !== 'Canlı Destek') {
+                tg.showPopup({
+                    title: 'Erişim Kısıtlı',
+                    message: name + ' özelliğini kullanabilmek için VIP üyeliğe sahip olmalısın.',
+                    buttons: [{id: 'buy', type: 'default', text: 'VIP Satın Al'}, {type: 'cancel', text: 'Kapat'}]
+                }, function(buttonId) {
+                    if (buttonId === 'buy') {
+                        tg.close(); // Bot üzerinden ödemeye yönlendirme mantığı için
+                    }
+                });
+            } else {
+                tg.showPopup({
+                    title: 'BatuWebs Elite',
+                    message: name + ' modülü şu anda başlatılıyor. Lütfen bekleyin...',
+                    buttons: [{type: 'ok', text: 'Tamam'}]
+                });
+            }
         }
     </script>
 </body>
