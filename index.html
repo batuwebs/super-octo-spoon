@@ -6,100 +6,180 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --blue: #0A84FF; --bg: #000; --card: #1C1C1E; --gray: #8E8E93; --red: #FF453A; --gold: #FFD60A; }
-        body { background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 20px 16px env(safe-area-inset-bottom); }
-        
-        /* Limit Header */
-        .limit-header { background: var(--card); border-radius: 15px; padding: 12px; margin-bottom: 20px; text-align: center; border: 0.5px solid #333; }
-        .limit-header span { color: var(--blue); font-weight: bold; }
+        :root {
+            --ios-blue: #007AFF;
+            --ios-bg: #000000;
+            --ios-card: rgba(28, 28, 30, 0.7);
+            --ios-text: #FFFFFF;
+            --ios-gray: #8E8E93;
+            --ios-red: #FF3B30;
+            --ios-gold: #FFD60A;
+        }
 
-        /* Icon Grid (Top Actions) */
-        .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-        .top-card { background: var(--card); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 0.5px solid #333; }
-        .top-card i { font-size: 24px; color: var(--gold); }
-        .top-card span { font-size: 13px; font-weight: 600; text-align: center; }
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-        /* Admin Panel Modal */
-        #admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 1000; padding: 20px; overflow-y: auto; }
-        .admin-section { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; }
-        .admin-input { width: 100%; background: #2C2C2E; border: none; padding: 12px; border-radius: 10px; color: #fff; margin: 8px 0; }
-        .admin-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: bold; margin-top: 5px; }
+        body {
+            background-color: var(--ios-bg);
+            background-image: radial-gradient(circle at top right, #1c1c1e, #000);
+            color: var(--ios-text);
+            margin: 0;
+            padding: 24px 16px env(safe-area-inset-bottom);
+            min-height: 100vh;
+        }
 
-        /* Main Modules */
-        .module-list { display: flex; flex-direction: column; gap: 10px; }
-        .module-item { background: var(--card); padding: 18px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; border: 0.5px solid #333; text-decoration: none; color: white; }
-        .module-info { display: flex; align-items: center; gap: 15px; }
-        .module-info i { width: 35px; height: 35px; background: #2C2C2E; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--blue); }
-        .module-item:active { background: #2C2C2E; transform: scale(0.98); }
+        /* Üst Durum Çubuğu */
+        .limit-banner {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 14px;
+            text-align: center;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .limit-banner b { color: var(--ios-blue); font-size: 18px; }
 
-        .chevron { color: var(--gray); font-size: 14px; }
-        .locked { opacity: 0.5; }
+        /* Üst İkonlar - Yatay Tasarım */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: var(--ios-card);
+            backdrop-filter: blur(20px);
+            border-radius: 22px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s;
+        }
+        .action-card:active { transform: scale(0.95); }
+        .action-card i { font-size: 26px; color: var(--ios-gold); }
+        .action-card span { font-size: 13px; font-weight: 600; letter-spacing: -0.2px; }
+
+        /* Modül Listesi */
+        .module-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .module-btn {
+            background: var(--ios-card);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-radius: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .module-content { display: flex; align-items: center; gap: 16px; }
+        .module-icon {
+            width: 42px; height: 42px;
+            background: rgba(0, 122, 255, 0.1);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--ios-blue);
+            font-size: 18px;
+        }
+
+        /* Limit Dolunca Pasif Durum */
+        .limit-reached {
+            opacity: 0.4;
+            filter: grayscale(1);
+            pointer-events: none; /* Tıklamayı kapatır */
+        }
+
+        .chevron { color: var(--ios-gray); font-size: 14px; }
+
+        /* Admin Paneli Modal */
+        #admin-panel {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; padding: 20px;
+        }
+
+        .admin-card {
+            background: #1c1c1e; border-radius: 18px; padding: 15px; margin-bottom: 15px;
+        }
+        input { width: 100%; background: #2c2c2e; border: none; padding: 12px; border-radius: 10px; color: white; margin: 10px 0; }
+        .btn-action { width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="limit-header">
-        GÜNLÜK KULLANIM HAKKI: <span id="limit-text">3 / 3</span>
+    <div class="limit-banner">
+        <div style="font-size: 11px; color: var(--ios-gray); margin-bottom: 4px; letter-spacing: 1px;">GÜNLÜK ERİŞİM</div>
+        <b id="limit-display">3 / 3</b>
     </div>
 
-    <div class="top-grid">
-        <div id="admin-icon" class="top-card" style="display:none;" onclick="toggleAdmin(true)">
-            <i class="fas fa-user-shield"></i>
-            <span>YÖNETİM PANELİ</span>
+    <div class="action-grid">
+        <div class="action-card" id="admin-icon" style="display:none;" onclick="openAdmin()">
+            <i class="fas fa-shield-halved"></i>
+            <span>YÖNETİM</span>
         </div>
-        <div class="top-card" onclick="showProfile()">
-            <i class="fas fa-address-card"></i>
-            <span>ÜYELİK DURUMU</span>
+        <div class="action-card" onclick="showUserStats()">
+            <i class="fas fa-user-circle"></i>
+            <span>ÜYELİK</span>
         </div>
     </div>
 
-    <div class="module-list">
-        <a href="belge.html" class="module-item">
-            <div class="module-info">
-                <i class="fas fa-file-invoice"></i>
+    <div class="module-section" id="module-container">
+        <a href="belge.html" class="module-btn" id="btn-karne" onclick="handleTap(event)">
+            <div class="module-content">
+                <div class="module-icon"><i class="fas fa-file-signature"></i></div>
                 <span>KARNE OLUŞTURUCU</span>
             </div>
             <i class="fas fa-chevron-right chevron"></i>
         </a>
 
         <script>
-            for(let i=0; i<6; i++) {
+            for(let i=1; i<=6; i++) {
                 document.write(`
-                <a href="soon.html" class="module-item locked">
-                    <div class="module-info">
-                        <i class="fas fa-layer-group"></i>
+                <a href="soon.html" class="module-btn" onclick="handleTap(event)">
+                    <div class="module-content">
+                        <div class="module-icon" style="background:rgba(142,142,147,0.1); color:var(--ios-gray);"><i class="fas fa-cubes"></i></div>
                         <span>ÇOK YAKINDA</span>
                     </div>
-                    <i class="fas fa-lock chevron"></i>
+                    <i class="fas fa-chevron-right chevron"></i>
                 </a>
                 `);
             }
         </script>
     </div>
 
-    <div id="admin-modal">
+    <div id="admin-panel">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2>Yönetim Merkezi</h2>
-            <button onclick="toggleAdmin(false)" style="background:none; border:none; color:var(--blue); font-weight:bold;">Kapat</button>
+            <h2 style="font-size: 28px;">Yönetim</h2>
+            <button onclick="closeAdmin()" style="background:none; border:none; color:var(--ios-blue); font-size:17px; font-weight:600;">Bitti</button>
         </div>
         
-        <div class="admin-section">
-            <h3>VIP İşlemleri</h3>
-            <input type="text" id="vip_id" class="admin-input" placeholder="Kullanıcı ID">
-            <button class="admin-btn" style="background:var(--gold); color:#000;" onclick="adminAction('VIP Ekle')">VIP Ekle</button>
-            <button class="admin-btn" style="background:var(--red); color:#fff;" onclick="adminAction('VIP Sil')">VIP İptal</button>
+        <div class="admin-card">
+            <span style="color:var(--ios-gold)">VIP YÖNETİMİ</span>
+            <input type="text" id="target_id" placeholder="Kullanıcı ID">
+            <button class="btn-action" style="background:var(--ios-blue); color:white;">VIP Tanımla / Kaldır</button>
         </div>
 
-        <div class="admin-section">
-            <h3>Kullanıcı Kontrol</h3>
-            <input type="text" id="ban_id" class="admin-input" placeholder="Kullanıcı ID">
-            <button class="admin-btn" style="background:#444; color:#fff;" onclick="adminAction('Banla')">Erişimi Yasakla</button>
-        </div>
-
-        <div class="admin-section">
-            <h3>Admin Yönetimi</h3>
-            <input type="text" id="new_admin_id" class="admin-input" placeholder="Yeni Admin ID">
-            <button class="admin-btn" style="background:var(--blue); color:#fff;" onclick="adminAction('Admin Ekle')">Admin Yetkisi Ver</button>
+        <div class="admin-card">
+            <span style="color:var(--ios-red)">ERİŞİM KONTROLÜ</span>
+            <input type="text" id="ban_id" placeholder="Kullanıcı ID">
+            <button class="btn-action" style="background:var(--ios-red); color:white;">Banla / Engeli Kaldır</button>
         </div>
     </div>
 
@@ -107,40 +187,55 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        const params = new URLSearchParams(window.location.search);
         const myId = "8795833691";
+        const params = new URLSearchParams(window.location.search);
         const userId = params.get('id');
         const isVip = params.get('vip') === '1' || userId === myId;
 
-        // Admin Kontrolü
-        if (userId === myId) {
+        // Limit & Admin Kontrolü
+        let clicks = parseInt(localStorage.getItem('b_clicks_v8') || "0");
+        const isAdmin = (userId === myId);
+
+        if (isAdmin) {
             document.getElementById('admin-icon').style.display = 'flex';
-            document.getElementById('limit-text').innerText = "SINIRSIZ";
+            document.getElementById('limit-display').innerText = "SINIRSIZ";
         } else if (isVip) {
-            document.getElementById('limit-text').innerText = "SINIRSIZ (VIP)";
+            document.getElementById('limit-display').innerText = "VIP - SINIRSIZ";
         } else {
-            let clicks = localStorage.getItem('clicks_v7') || 0;
-            document.getElementById('limit-text').innerText = (3 - clicks) + " / 3";
+            document.getElementById('limit-display').innerText = (3 - clicks) + " / 3";
+            
+            // Eğer limit dolduysa modülleri pasif yap
+            if (clicks >= 3) {
+                document.querySelectorAll('.module-btn').forEach(btn => {
+                    btn.classList.add('limit-reached');
+                });
+            }
         }
 
-        function toggleAdmin(show) {
+        function handleTap(e) {
+            if (!isAdmin && !isVip) {
+                if (clicks >= 3) {
+                    e.preventDefault();
+                    tg.showAlert("Günlük 3 olan tıklama hakkın doldu. Yarın tekrar gel veya VIP üye ol!");
+                    return;
+                }
+                // Tıklama sayısını artır
+                clicks++;
+                localStorage.setItem('b_clicks_v8', clicks);
+            }
             tg.HapticFeedback.impactOccurred('medium');
-            document.getElementById('admin-modal').style.display = show ? 'block' : 'none';
         }
 
-        function showProfile() {
+        function showUserStats() {
             tg.showPopup({
-                title: 'Üyelik Bilgileri',
-                message: `ID: ${userId}\nStatü: ${isVip ? 'VIP / Admin' : 'Standart'}\nKayıt: Aktif sistem üyesi`,
-                buttons: [{type: 'ok'}]
+                title: 'Profil Detayları',
+                message: `User ID: ${userId}\nStatü: ${isAdmin ? 'Yönetici' : (isVip ? 'VIP' : 'Standart')}\nKalan Hak: ${isAdmin || isVip ? '∞' : (3-clicks)}`,
+                buttons: [{type: 'ok', text: 'Kapat'}]
             });
         }
 
-        function adminAction(action) {
-            tg.showConfirm(`${action} işlemini onaylıyor musunuz?`, (ok) => {
-                if(ok) tg.showAlert("İşlem bot üzerinden başarıyla gerçekleştirildi.");
-            });
-        }
+        function openAdmin() { tg.HapticFeedback.impactOccurred('heavy'); document.getElementById('admin-panel').style.display = 'block'; }
+        function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
     </script>
 </body>
 </html>
