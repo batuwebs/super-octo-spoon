@@ -3,229 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BatuWebs Elite Panel</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --gold: #f1c40f;
-            --dark-bg: #09090b;
-            --card-bg: #121214;
-            --border: #27272a;
-            --text-gray: #a1a1aa;
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root { --gold: #f1c40f; --bg: #0f0f0f; --card: #1a1a1a; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 15px; }
         
-        body {
-            background-color: var(--dark-bg);
-            color: white;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 16px;
-            overflow-x: hidden;
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .card { background: var(--card); border: 1px solid #333; border-radius: 20px; padding: 20px; margin-bottom: 20px; text-align: center; }
+        .gold-text { color: var(--gold); font-weight: bold; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn { 
+            background: #252525; border: 1px solid #333; border-radius: 15px; padding: 25px 10px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;
         }
+        .btn i { font-size: 24px; color: var(--gold); }
+        .btn:active { transform: scale(0.95); background: #333; }
 
-        /* Üst Bilgi Kartı */
-        .status-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .user-info h2 { margin: 0; font-size: 18px; color: var(--gold); }
-        .user-info p { margin: 4px 0 0; font-size: 12px; color: var(--text-gray); }
-
-        .badge {
-            background: rgba(241, 196, 15, 0.1);
-            color: var(--gold);
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: bold;
-            border: 1px solid rgba(241, 196, 15, 0.2);
-        }
-
-        /* Ana Menü Izgarası */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 80px;
-        }
-
-        .menu-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px 12px;
-            text-align: center;
-            transition: all 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .menu-item:active {
-            transform: scale(0.96);
-            background: #1c1c1f;
-            border-color: var(--gold);
-        }
-
-        .menu-item i {
-            font-size: 28px;
-            color: var(--gold);
-            filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.3));
-        }
-
-        .menu-item span {
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .menu-item .tag {
-            font-size: 9px;
-            color: var(--text-gray);
-            text-transform: uppercase;
-        }
-
-        /* Alt Navigasyon */
-        .bottom-nav {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            background: rgba(18, 18, 20, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px;
-            z-index: 100;
-        }
-
-        .nav-link { color: var(--text-gray); font-size: 20px; transition: 0.3s; }
-        .nav-link.active { color: var(--gold); }
-
-        /* Kilitli Özellik Efekti */
-        .locked { opacity: 0.6; position: relative; }
-        .locked::after {
-            content: "\f023";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 10px;
-            color: var(--text-gray);
-        }
+        .admin-only { display: none; margin-top: 20px; border-top: 1px dashed #444; padding-top: 20px; }
+        
+        .footer { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; display: flex; justify-content: center; gap: 20px; }
+        .tab-btn { background: #222; border: 1px solid #444; padding: 10px 20px; border-radius: 30px; color: #888; font-size: 14px; }
+        .tab-btn.active { background: var(--gold); color: black; border: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="status-card">
-        <div class="user-info">
-            <h2 id="u_name">Hoş Geldin!</h2>
-            <p id="u_days">Kullanım hakkı sorgulanıyor...</p>
-        </div>
-        <div id="u_badge" class="badge">SORGULANIYOR</div>
-    </div>
-
-    <div class="grid">
-        <div class="menu-item" onclick="handleAction('Belge Oluşturucu')">
-            <i class="fas fa-file-contract"></i>
-            <span>BELGE OLUŞTUR</span>
-            <div class="tag">AKTİF</div>
-        </div>
-        
-        <div class="menu-item locked" onclick="handleAction('Hesap Analizi')">
-            <i class="fas fa-chart-pie"></i>
-            <span>ANALİZ ARAÇLARI</span>
-            <div class="tag">VIP GEREKLİ</div>
+    <div id="user-tab" class="tab-content active">
+        <div class="card">
+            <h2 style="margin:0">BATUWEBS <span class="gold-text">ELITE</span></h2>
+            <p id="status-text" style="font-size: 14px; color: #888;">Yükleniyor...</p>
         </div>
 
-        <div class="menu-item locked" onclick="handleAction('Proxy Yönetimi')">
-            <i class="fas fa-network-wired"></i>
-            <span>PROXY LİSTESİ</span>
-            <div class="tag">VIP GEREKLİ</div>
-        </div>
-
-        <div class="menu-item locked" onclick="handleAction('Tasarım Modülü')">
-            <i class="fas fa-wand-magic-sparkles"></i>
-            <span>TASARIM YAP</span>
-            <div class="tag">ÇOK YAKINDA</div>
-        </div>
-
-        <div class="menu-item locked" onclick="handleAction('Sistem Ayarları')">
-            <i class="fas fa-sliders"></i>
-            <span>AYARLAR</span>
-            <div class="tag">GÜNCELLEME</div>
-        </div>
-
-        <div class="menu-item" onclick="handleAction('Canlı Destek')">
-            <i class="fas fa-headset"></i>
-            <span>CANLI DESTEK</span>
-            <div class="tag">7/24 YARDIM</div>
+        <div class="grid">
+            <div class="btn" onclick="checkLimit('Araç 1')">
+                <i class="fas fa-bolt"></i>
+                <span>Hızlı Analiz</span>
+            </div>
+            <div class="btn" onclick="checkLimit('Araç 2')">
+                <i class="fas fa-fingerprint"></i>
+                <span>Güvenlik Sorgu</span>
+            </div>
         </div>
     </div>
 
-    <div class="bottom-nav">
-        <i class="fas fa-house nav-link active"></i>
-        <i class="fas fa-crown nav-link" onclick="handleAction('VIP Bilgi')"></i>
-        <i class="fas fa-wallet nav-item nav-link" onclick="handleAction('Bakiye')"></i>
-        <i class="fas fa-user-circle nav-link" onclick="handleAction('Profil')"></i>
+    <div id="admin-tab" class="tab-content">
+        <div class="card">
+            <h2 class="gold-text">ADMİN YÖNETİMİ</h2>
+            <p>Sistem Kontrol Merkezi</p>
+        </div>
+        <div class="grid">
+            <div class="btn" onclick="alert('Kullanıcı listesi yakında...')">
+                <i class="fas fa-users"></i>
+                <span>Kullanıcılar</span>
+            </div>
+            <div class="btn" onclick="alert('Sistem logları...')">
+                <i class="fas fa-terminal"></i>
+                <span>Loglar</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="tab-btn active" onclick="switchTab('user-tab', this)">PANEL</div>
+        <div id="admin-nav" class="tab-btn" style="display:none" onclick="switchTab('admin-tab', this)">ADMİN</div>
     </div>
 
     <script>
-        // Telegram WebApp Başlatma
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Ekranı tam boy yap
-        tg.ready();
+        tg.expand();
 
-        // Parametreleri Çek (Botun gönderdiği linkten)
-        const urlParams = new URLSearchParams(window.location.search);
-        const isVip = urlParams.get('vip') === '1';
-        const days = urlParams.get('days') || '0';
-        const userId = urlParams.get('id');
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get('id');
+        const isVip = params.get('vip') === '1';
+        const adminId = "8795833691";
 
-        // UI Güncelleme
-        document.getElementById('u_badge').innerText = isVip ? 'ELITE VIP' : 'STANDART';
-        document.getElementById('u_days').innerText = days + ' Günlük Kullanım Hakkı';
-        if(tg.initDataUnsafe.user) {
-            document.getElementById('u_name').innerText = "Selam, " + tg.initDataUnsafe.user.first_name;
+        // Admin Kontrolü
+        if (userId === adminId) {
+            document.getElementById('admin-nav').style.display = 'block';
         }
 
-        // Aksiyon Yönetimi
-        function handleAction(name) {
-            tg.HapticFeedback.impactOccurred('medium'); // Titreşim desteği
-            
-            if (!isVip && name !== 'Belge Oluşturucu' && name !== 'Canlı Destek') {
-                tg.showPopup({
-                    title: 'Erişim Kısıtlı',
-                    message: name + ' özelliğini kullanabilmek için VIP üyeliğe sahip olmalısın.',
-                    buttons: [{id: 'buy', type: 'default', text: 'VIP Satın Al'}, {type: 'cancel', text: 'Kapat'}]
-                }, function(buttonId) {
-                    if (buttonId === 'buy') {
-                        tg.close(); // Bot üzerinden ödemeye yönlendirme mantığı için
-                    }
-                });
-            } else {
-                tg.showPopup({
-                    title: 'BatuWebs Elite',
-                    message: name + ' modülü şu anda başlatılıyor. Lütfen bekleyin...',
-                    buttons: [{type: 'ok', text: 'Tamam'}]
-                });
+        // VIP Durumu ve Limit
+        let clicks = localStorage.getItem('clicks') || 0;
+        document.getElementById('status-text').innerText = isVip ? "🌟 Sınırsız VIP Üye" : "🆓 Kalan Hak: " + (2 - clicks);
+
+        function checkLimit(tool) {
+            if (!isVip && clicks >= 2) {
+                tg.HapticFeedback.notificationOccurred('error');
+                tg.showPopup({ title: 'Limit Doldu', message: 'Günlük 2 hakkınız bitti. VIP alarak sınırı kaldırın!', buttons: [{type: 'ok'}] });
+                return;
             }
+            
+            if(!isVip) {
+                clicks++;
+                localStorage.setItem('clicks', clicks);
+            }
+            
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.showPopup({ title: 'Başarılı', message: tool + ' çalıştırıldı.', buttons: [{type: 'ok'}] });
+            location.reload();
+        }
+
+        function switchTab(id, btn) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
         }
     </script>
 </body>
