@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BatuWebs Premium Panel</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: white; text-align: center; padding: 20px; }
+        .profile-card { background: #1a1a1a; border-radius: 20px; padding: 20px; border: 1px solid #f1c40f; margin-bottom: 20px; }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #f1c40f; margin-bottom: 10px; }
+        .limit-bar { background: #333; height: 10px; border-radius: 5px; margin: 15px 0; overflow: hidden; }
+        .limit-fill { background: #f1c40f; height: 100%; width: 0%; transition: 1s; }
+        .info { font-size: 0.9em; color: #aaa; }
+        .premium-tag { color: #f1c40f; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <img id="user-pic" class="avatar" src="https://via.placeholder.com/80) " alt="Profil">
+        <h2 id="user-name">Yükleniyor...</h2>
+        <p class="info">ID: <span id="user-id">000000</span></p>
+        <hr style="border: 0.1px solid #333;">
+        <p>Üyelik Durumu: <span id="status" class="premium-tag">Kontrol Ediliyor...</span></p>
+        <div class="limit-bar"><div id="bar" class="limit-fill"></div></div>
+        <p id="days-left" class="info">Kalan Gün: --</p>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        
+        // Telegram verilerini çek
+        const user = tg.initDataUnsafe.user;
+        document.getElementById('user-name').innerText = user.first_name + " " + (user.last_name || "");
+        document.getElementById('user-id').innerText = user.id;
+        if(user.photo_url) document.getElementById('user-pic').src = user.photo_url;
+
+        // URL'den gelen VIP bilgilerini yakala
+        const urlParams = new URLSearchParams(window.location.search);
+        const days = urlParams.get('days') || 0;
+        const total = 30; // Toplam limit
+        
+        document.getElementById('days-left').innerText = "Kalan Gün: " + days;
+        document.getElementById('status').innerText = days > 0 ? "🌟 GOLD" : "🆓 ÜCRETSİZ";
+        document.getElementById('bar').style.width = (days / total * 100) + "%";
+    </script>
+</body>
+</html>
