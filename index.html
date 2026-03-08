@@ -6,253 +6,98 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --ios-blue: #007AFF;
-            --ios-bg: #000000;
-            --ios-card: #1C1C1E;
-            --ios-text: #FFFFFF;
-            --ios-gray: #8E8E93;
-            --ios-gold: #FFD60A;
+        /* iOS Pro Tasarım Değişkenleri */
+        :root { --blue: #007AFF; --bg: #000; --card: #1C1C1E; --gold: #FFD60A; }
+        body { background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; padding: 20px 16px; margin: 0; }
+        
+        .header h1 { font-size: 34px; letter-spacing: -1px; margin: 0; }
+        .status-widget { 
+            background: var(--card); border-radius: 22px; padding: 18px; 
+            display: flex; align-items: center; justify-content: space-between; 
+            margin: 20px 0; border: 0.5px solid #38383A;
         }
-
-        * { 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        .badge-admin { background: #FF3B30; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 800; }
+        .badge-vip { background: rgba(255, 214, 10, 0.2); color: var(--gold); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+        
+        .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .app-card { 
+            background: var(--card); border-radius: 24px; padding: 20px; 
+            border: 0.5px solid #38383A; transition: 0.2s;
         }
-
-        body {
-            background-color: var(--ios-bg);
-            color: var(--ios-text);
-            margin: 0;
-            padding: 20px 16px env(safe-area-inset-bottom);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Üst Başlık iOS Stili */
-        .header {
-            margin-bottom: 24px;
-            padding-top: 10px;
-        }
-        .header h1 {
-            font-size: 34px;
-            font-weight: 700;
-            margin: 0;
-            letter-spacing: -1px;
-        }
-        .header p {
-            color: var(--ios-gray);
-            font-size: 15px;
-            margin: 4px 0 0;
-        }
-
-        /* Durum Kartı (Glassmorphism) */
-        .status-widget {
-            background: var(--ios-card);
-            border-radius: 22px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            border: 0.5px solid #38383A;
-        }
-
-        .user-meta { display: flex; align-items: center; gap: 12px; }
-        .avatar {
-            width: 44px; height: 44px;
-            background: linear-gradient(135deg, #FFD60A, #FF9F0A);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; color: black; font-size: 20px;
-        }
-
-        .badge-elite {
-            background: rgba(255, 214, 10, 0.15);
-            color: var(--ios-gold);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        /* Uygulama Izgarası */
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .app-card {
-            background: var(--ios-card);
-            border-radius: 24px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 0.5px solid #38383A;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .app-card:active {
-            transform: scale(0.92);
-            background: #2C2C2E;
-        }
-
-        .app-icon {
-            width: 40px; height: 40px;
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px;
-        }
-
-        .icon-blue { background: rgba(0, 122, 255, 0.15); color: #0A84FF; }
-        .icon-gold { background: rgba(255, 214, 10, 0.15); color: #FFD60A; }
-        .icon-purple { background: rgba(191, 90, 242, 0.15); color: #BF5AF2; }
-
-        .app-card span { font-size: 14px; font-weight: 600; }
-        .app-card small { font-size: 11px; color: var(--ios-gray); }
-
-        /* iOS Tab Bar */
-        .tab-bar {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            height: 84px;
-            background: rgba(28, 28, 30, 0.85);
-            backdrop-filter: saturate(180%) blur(20px);
-            border-top: 0.5px solid #38383A;
-            display: flex;
-            justify-content: space-around;
-            padding-top: 10px;
-            padding-bottom: env(safe-area-inset-bottom);
-            z-index: 1000;
-        }
-
-        .tab-item {
-            display: flex; flex-direction: column; align-items: center;
-            color: var(--ios-gray); text-decoration: none; font-size: 10px; gap: 4px;
-        }
-        .tab-item.active { color: var(--ios-blue); }
-        .tab-item i { font-size: 22px; }
-
-        /* Admin Rozeti */
-        .admin-tag {
-            position: absolute; top: 10px; right: 10px;
-            background: #FF3B30; color: white;
-            font-size: 8px; padding: 2px 6px; border-radius: 6px;
-        }
+        .app-card:active { transform: scale(0.9); }
+        .icon { width: 40px; height: 40px; border-radius: 10px; background: #2C2C2E; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 20px; color: var(--gold); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <p id="date-now">8 Mart Pazar</p>
-        <h1>BatuWebs</h1>
+        <h1 id="welcome">BatuWebs</h1>
     </div>
 
     <div class="status-widget">
-        <div class="user-meta">
-            <div class="avatar" id="u_init">B</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div id="u_avatar" style="width:44px; height:44px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-weight:bold;">B</div>
             <div>
-                <div style="font-weight: 600; font-size: 15px;" id="u_name">Kullanıcı</div>
-                <div style="font-size: 12px; color: var(--ios-gray);" id="u_limit">Kalan Hak: 2</div>
+                <div id="u_name" style="font-weight:600;">Admin</div>
+                <div id="u_limit" style="font-size:12px; color:#8E8E93;">Sınırsız Erişim</div>
             </div>
         </div>
-        <div class="badge-elite" id="u_vip">STANDART</div>
+        <div id="u_status" class="badge-vip">ELITE</div>
     </div>
 
     <div class="app-grid">
-        <div class="app-card" onclick="runApp('Hızlı Analiz')">
-            <div class="app-icon icon-blue"><i class="fas fa-bolt"></i></div>
-            <div>
-                <span>Hızlı Analiz</span>
-                <small>Sistemi tara</small>
-            </div>
-        </div>
-
-        <div class="app-card" onclick="runApp('Güvenlik')">
-            <div class="app-icon icon-purple"><i class="fas fa-lock"></i></div>
-            <div>
-                <span>Güvenlik</span>
-                <small>Şifreleme</small>
-            </div>
-        </div>
-
-        <div id="admin_module" class="app-card" style="display: none;" onclick="runApp('Yönetim')">
-            <div class="admin-tag">MASTER</div>
-            <div class="app-icon icon-gold"><i class="fas fa-crown"></i></div>
-            <div>
-                <span>Yönetim</span>
-                <small>Admin Paneli</small>
-            </div>
+        <div class="app-card" onclick="run('Analiz')"><div class="icon"><i class="fas fa-bolt"></i></div><span>Hızlı Analiz</span></div>
+        <div class="app-card" onclick="run('Güvenlik')"><div class="icon"><i class="fas fa-shield"></i></div><span>Güvenlik</span></div>
+        <div class="app-card" onclick="run('Proxy')"><div class="icon"><i class="fas fa-server"></i></div><span>Proxy</span></div>
+        <div id="admin_btn" class="app-card" style="display:none; border-color: #FF3B30;" onclick="run('Admin Panel')">
+            <div class="icon" style="color:#FF3B30;"><i class="fas fa-crown"></i></div><span>Yönetim</span>
         </div>
     </div>
-
-    <nav class="tab-bar">
-        <a href="#" class="tab-item active"><i class="fas fa-house"></i><span>Ana Sayfa</span></a>
-        <a href="#" class="tab-item" onclick="runApp('VIP Satın Al')"><i class="fas fa-star"></i><span>Yıldızlar</span></a>
-        <a href="#" class="tab-item" onclick="runApp('Destek')"><i class="fas fa-message"></i><span>Destek</span></a>
-        <a href="#" class="tab-item" onclick="runApp('Profil')"><i class="fas fa-circle-user"></i><span>Profil</span></a>
-    </nav>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        tg.enableClosingConfirmation();
 
-        // Parametreler
         const params = new URLSearchParams(window.location.search);
-        const isVip = params.get('vip') === '1';
         const userId = params.get('id');
-        const adminId = "8795833691";
+        const isVip = params.get('vip') === '1';
+        const myId = "8795833691"; // Senin ID'n
 
-        // Tarih Bilgisi
-        const options = { weekday: 'long', month: 'long', day: 'numeric' };
-        document.getElementById('date-now').innerText = new Date().toLocaleDateString('tr-TR', options);
+        // --- GOD MODE KONTROLÜ ---
+        const isAdmin = (userId === myId);
 
-        // Kullanıcı Arayüzü
-        if (tg.initDataUnsafe.user) {
-            const user = tg.initDataUnsafe.user;
-            document.getElementById('u_name').innerText = user.first_name;
-            document.getElementById('u_init').innerText = user.first_name.charAt(0);
-        }
-
-        if (userId === adminId) {
-            document.getElementById('admin_module').style.display = 'flex';
-        }
-
-        if (isVip) {
-            document.getElementById('u_vip').innerText = "ELITE VIP";
+        if (isAdmin) {
+            document.getElementById('u_name').innerText = "KURUCU";
+            document.getElementById('u_status').className = "badge-admin";
+            document.getElementById('u_status').innerText = "GOD MODE";
+            document.getElementById('u_limit').innerText = "Limit Devre Dışı";
+            document.getElementById('admin_btn').style.display = "block";
+            document.getElementById('u_avatar').style.background = "#FF3B30";
+        } else if (isVip) {
+            document.getElementById('u_status').innerText = "ELITE VIP";
             document.getElementById('u_limit').innerText = "Sınırsız Erişim";
         }
 
-        // Limit Mekanizması
-        let clicks = parseInt(localStorage.getItem('ios_clicks') || "0");
-        if (!isVip) document.getElementById('u_limit').innerText = `Kalan Hak: ${2 - clicks}`;
+        let clicks = parseInt(localStorage.getItem('b_clicks') || "0");
+        if (!isAdmin && !isVip) document.getElementById('u_limit').innerText = `Kalan Hak: ${2 - clicks}`;
 
-        function runApp(name) {
-            tg.HapticFeedback.impactOccurred('medium');
-
-            if (!isVip && clicks >= 2 && name !== 'VIP Satın Al') {
-                tg.showPopup({
-                    title: 'Limit Aşıldı',
-                    message: 'Günlük kullanım sınırına ulaştın. VIP üyeliğe geçmek ister misin?',
-                    buttons: [{type: 'default', text: 'Satın Al', id: 'buy'}, {type: 'cancel'}]
-                }, (id) => { if(id === 'buy') tg.close(); });
+        function run(name) {
+            tg.HapticFeedback.impactOccurred('heavy');
+            
+            // Eğer adminse veya vip ise limit sorgulama, direkt çalıştır
+            if (isAdmin || isVip) {
+                tg.showPopup({ title: 'Başlatıldı', message: name + ' modülü açıldı.', buttons: [{type: 'ok'}] });
                 return;
             }
 
-            if (!isVip && name !== 'VIP Satın Al') {
-                clicks++;
-                localStorage.setItem('ios_clicks', clicks);
-                document.getElementById('u_limit').innerText = `Kalan Hak: ${2 - clicks}`;
+            if (clicks >= 2) {
+                tg.showPopup({ title: 'Limit!', message: 'Hakların bitti AMK. VIP al!', buttons: [{type: 'close'}] });
+                return;
             }
 
-            tg.showPopup({ title: 'BatuWebs', message: name + ' başarıyla açıldı.', buttons: [{type: 'ok'}] });
+            clicks++;
+            localStorage.setItem('b_clicks', clicks);
+            location.reload();
         }
     </script>
 </body>
