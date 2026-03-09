@@ -3,200 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BatuWebs Mini App</title>
+    <title>BatuWebs Platform</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS TASARIMI */
+        :root {
+            --bg-color: #0b0b0b;
+            --card-bg: #161616;
+            --accent-color: #0088cc;
+            --vip-color: #ffd700;
+            --text-main: #ffffff;
+            --text-secondary: #888888;
+        }
+
         body {
-            background-color: #0f0f0f;
-            color: white;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+            padding: 0;
             overflow-x: hidden;
         }
 
-        .container {
-            width: 100%;
-            max-width: 450px;
+        .page {
+            display: none;
+            padding: 20px;
+            padding-bottom: 100px;
+            animation: fadeIn 0.3s ease;
         }
 
-        /* Profil Kartı */
-        .user-card {
-            background: linear-gradient(145deg, #1a1a1a, #252525);
+        .active-page { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Üst Profil Kartı */
+        .profile-header {
+            background: linear-gradient(145deg, #1a1a1a, #222);
+            border-radius: 24px;
             padding: 25px;
-            border-radius: 25px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            margin-bottom: 20px;
             border: 1px solid #333;
+            margin-bottom: 20px;
         }
 
-        #user-photo {
-            width: 90px;
-            height: 90px;
+        .avatar {
+            width: 80px; height: 80px;
             border-radius: 50%;
-            border: 3px solid #0088cc;
-            margin-bottom: 12px;
+            border: 3px solid var(--accent-color);
+            margin-bottom: 10px;
             object-fit: cover;
-            background-color: #333;
         }
 
-        #user-name { margin: 5px 0; font-size: 20px; font-weight: bold; }
-        #user-handle { margin: 0; color: #0088cc; font-size: 14px; }
-
-        .status-badge {
-            background: #0088cc;
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-            margin-top: 15px;
-            text-transform: uppercase;
-        }
-
-        .vip-status { background: linear-gradient(90deg, #ffd700, #b8860b); color: #000; }
-
-        /* Bilgi Kutuları */
-        .info-grid {
+        /* Bilgi Kartları */
+        .grid-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
             margin-bottom: 25px;
         }
 
-        .info-box {
-            background: #1a1a1a;
+        .stat-card {
+            background: var(--card-bg);
             padding: 15px;
             border-radius: 18px;
             text-align: center;
             border: 1px solid #222;
         }
 
-        .label { font-size: 11px; color: #777; display: block; margin-bottom: 5px; text-transform: uppercase; }
-        .value { font-size: 15px; font-weight: bold; color: #eee; }
+        /* Buton Listesi */
+        .btn-list { display: flex; flex-direction: column; gap: 12px; }
 
-        .divider { border: 0; border-top: 1px solid #222; margin: 20px 0; }
-
-        /* Butonlar */
-        .button-container { display: flex; flex-direction: column; gap: 12px; }
-
-        .action-button {
+        .item-btn {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            background: #1e1e1e;
-            padding: 16px 20px;
-            border-radius: 15px;
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 16px;
             text-decoration: none;
             color: white;
-            font-weight: 500;
-            transition: all 0.2s ease;
             border: 1px solid #2a2a2a;
+            transition: 0.2s;
         }
 
-        .action-button:active { transform: scale(0.97); background: #282828; }
+        .item-btn:active { transform: scale(0.98); background: #222; }
         
-        .btn-text { flex-grow: 1; margin: 0 15px; font-size: 15px; }
-        .icon-box { font-size: 20px; display: flex; align-items: center; justify-content: center; }
+        .item-icon { width: 40px; font-size: 20px; color: var(--accent-color); }
+        .item-text { flex-grow: 1; font-weight: 500; }
+        .item-arrow { color: #444; }
 
-        /* VIP Özel Stil */
-        .vip-btn { border: 1px solid #ffd70033; background: #1a180a; }
-        .vip-btn .btn-text { color: #ffd700; }
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; width: 100%;
+            background: rgba(22, 22, 22, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid #333;
+            z-index: 100;
+        }
 
-        .footer-note { text-align: center; color: #444; font-size: 11px; margin-top: 30px; line-height: 1.5; }
+        .nav-item {
+            color: var(--text-secondary);
+            text-align: center;
+            text-decoration: none;
+            font-size: 11px;
+            transition: 0.3s;
+        }
+
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .nav-item.active { color: var(--accent-color); }
+
+        /* Admin Kısmı */
+        .admin-section { background: #1a1010; border: 1px solid #4e1a1a; padding: 15px; border-radius: 15px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="user-card">
-            <img id="user-photo" src="https://via.placeholder.com/100?text=..." alt="Profil">
-            <h2 id="user-name">Yükleniyor...</h2>
-            <p id="user-handle">@bekleyiniz</p>
-            <div id="status-chip" class="status-badge">Standart Üye</div>
+
+    <div id="home" class="page active-page">
+        <div class="profile-header">
+            <img id="u-photo" src="https://via.placeholder.com/80" class="avatar">
+            <h2 id="u-name" style="margin: 5px 0;">Yükleniyor...</h2>
+            <div id="u-badge" style="color: var(--accent-color); font-size: 13px; font-weight: bold;">STANDART ÜYE</div>
         </div>
 
-        <div class="info-grid">
-            <div class="info-box">
-                <span class="label">Günlük Limit</span>
-                <span class="value" id="user-limit">2 / 2</span>
+        <div class="grid-stats">
+            <div class="stat-card">
+                <small style="color: #666;">GÜNLÜK LİMİT</small>
+                <div style="font-size: 18px; font-weight: bold;">2 / 2</div>
             </div>
-            <div class="info-box">
-                <span class="label">VIP Süresi</span>
-                <span class="value" id="vip-time">Yok</span>
+            <div class="stat-card">
+                <small style="color: #666;">VIP DURUMU</small>
+                <div style="font-size: 18px; font-weight: bold; color: var(--vip-color);">YOK</div>
             </div>
         </div>
 
-        <hr class="divider">
-
-        <div id="button-list" class="button-container">
+        <div class="btn-list" id="main-btns">
             </div>
+    </div>
 
-        <div class="footer-note">
-            BatuWebs Altyapısı Kullanılmaktadır.<br>
-            Her gün 00:00'da kullanım limitleri yenilenir.
+    <div id="settings" class="page">
+        <h3><i class="fa-solid fa-sliders"></i> Ayarlar & Kılavuz</h3>
+        <div class="stat-card" style="text-align: left; margin-bottom: 15px;">
+            <p><strong>🕒 Limit Yenileme:</strong> Her gece 00:00'da tüm limitler sıfırlanır.</p>
+            <p><strong>💎 VIP Avantajı:</strong> Reklamsız erişim ve sınırsız dosya indirme.</p>
+        </div>
+        <div class="btn-list">
+            <a href="https://t.me/batuwebs" class="item-btn">
+                <div class="item-icon"><i class="fa-solid fa-headset"></i></div>
+                <div class="item-text">Canlı Destek</div>
+                <div class="item-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
         </div>
     </div>
 
+    <div id="admin" class="page">
+        <h3 style="color: #ff4444;"><i class="fa-solid fa-user-shield"></i> Admin Kontrol</h3>
+        <div class="admin-section">
+            <h4>Hızlı İşlemler</h4>
+            <button onclick="tg.showAlert('Reklam Modülü Yakında!')" style="width: 100%; padding: 12px; border-radius: 10px; border: none; background: #4e1a1a; color: white; font-weight: bold;">📢 Toplu Reklam Gönder</button>
+            <p style="font-size: 12px; color: #888; margin-top: 15px;">Kullanıcı veritabanı Pydroid üzerinden yönetilmektedir.</p>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showPage('home', this)">
+            <i class="fa-solid fa-house"></i>
+            Ana Sayfa
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('settings', this)">
+            <i class="fa-solid fa-gear"></i>
+            Ayarlar
+        </a>
+        <a href="#" id="admin-nav" class="nav-item" style="display:none;" onclick="showPage('admin', this)">
+            <i class="fa-solid fa-lock"></i>
+            Admin
+        </a>
+    </nav>
+
     <script>
-        // Telegram Web App API Başlatma
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Uygulamayı tam ekran açar
+        tg.expand();
         tg.ready();
 
-        // Kullanıcı Verilerini Telegram'dan Çekme
-        const userData = tg.initDataUnsafe.user;
-
-        if (userData) {
-            document.getElementById('user-name').innerText = userData.first_name + (userData.last_name ? " " + userData.last_name : "");
-            document.getElementById('user-handle').innerText = userData.username ? "@" + userData.username : "ID: " + userData.id;
+        // Kullanıcı Verileri
+        const user = tg.initDataUnsafe.user;
+        if(user) {
+            document.getElementById('u-name').innerText = user.first_name;
+            if(user.photo_url) document.getElementById('u-photo').src = user.photo_url;
             
-            if (userData.photo_url) {
-                document.getElementById('user-photo').src = userData.photo_url;
+            // Admin Kontrolü (Senin ID'n)
+            if(user.id === 8795833691) {
+                document.getElementById('admin-nav').style.display = 'block';
             }
         }
 
-        // BUTON LİSTESİ (Json Mantığı)
-        // Burayı istediğin gibi düzenleyebilirsin
-        const myButtons = [
-            { name: "Dosya Paylaşım", link: "https://t.me/batuWebsTR", iconL: "📁", iconR: "📥", type: "standart" },
-            { name: "E-Ticaret Kursları", link: "https://t.me/eticaretnedir", iconL: "💰", iconR: "🚀", type: "standart" },
-            { name: "VIP Özel İçerik", link: "#", iconL: "💎", iconR: "🔒", type: "vip" },
-            { name: "Destek Al", link: "https://t.me/batuwebs", iconL: "🛠", iconR: "💬", type: "standart" }
+        // Sayfa Değiştirme Fonksiyonu
+        function showPage(pageId, element) {
+            tg.HapticFeedback.impactOccurred('light');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active-page');
+            element.classList.add('active');
+        }
+
+        // Dinamik Butonlar
+        const buttons = [
+            { name: "Dosya Arşivi", icon: "fa-folder-open", link: "https://t.me/batuWebsTR" },
+            { name: "E-Ticaret Kursu", icon: "fa-cart-shopping", link: "https://t.me/eticaretnedir" },
+            { name: "BatuMods Özel", icon: "fa-code", link: "https://t.me/batuModsTR" }
         ];
 
-        const listContainer = document.getElementById('button-list');
-
-        myButtons.forEach(btn => {
-            const btnEl = document.createElement('a');
-            btnEl.href = btn.link;
-            btnEl.className = btn.type === 'vip' ? 'action-button vip-btn' : 'action-button';
-            
-            btnEl.innerHTML = `
-                <div class="icon-box">${btn.iconL}</div>
-                <div class="btn-text">${btn.name}</div>
-                <div class="icon-box">${btn.iconR}</div>
+        const btnContainer = document.getElementById('main-btns');
+        buttons.forEach(b => {
+            btnContainer.innerHTML += `
+                <a href="${b.link}" class="item-btn" onclick="tg.openLink('${b.link}')">
+                    <div class="item-icon"><i class="fa-solid ${b.icon}"></i></div>
+                    <div class="item-text">${b.name}</div>
+                    <div class="item-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </a>
             `;
-            
-            // Linke tıklanınca Telegram içinde açılması için
-            btnEl.onclick = (e) => {
-                if(btn.link !== "#") {
-                    tg.openLink(btn.link);
-                    e.preventDefault();
-                }
-            };
-
-            listContainer.appendChild(btnEl);
-        });
-
-        // Haptic Feedback (Titreşim) ekleme
-        document.querySelectorAll('.action-button').forEach(button => {
-            button.addEventListener('click', () => {
-                tg.HapticFeedback.impactOccurred('light');
-            });
         });
     </script>
 </body>
