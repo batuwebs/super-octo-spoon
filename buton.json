@@ -1,0 +1,23 @@
+[
+  {
+    "adi": "Dosya İndir",
+    "link": "https://t.me/batuWebsTR",
+    "ikon_sol": "📥",
+    "ikon_sag": "🔥",
+    "durum": "standart"
+  },
+  {
+    "adi": "VIP Panel",
+    "link": "https://site.com/vip",
+    "ikon_sol": "💎",
+    "ikon_sag": "🔒",
+    "durum": "vip"
+  },
+  {
+    "adi": "E-Ticaret Kanalı",
+    "link": "https://t.me/eticaretnedir",
+    "ikon_sol": "💰",
+    "ikon_sag": "🚀",
+    "durum": "standart"
+  }
+]
