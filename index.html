@@ -3,128 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BatuWebs Pro</title>
+    <title>BatuWebs Premium V3</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --main-bg: #090909; --card-bg: #1a1a1a; --accent: #0088cc; --vip-gold: #ffd700; }
-        body { background: var(--main-bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        :root { --bg: #050505; --card: #121212; --accent: #0088cc; --gold: #f1c40f; --danger: #e74c3c; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
         
-        .page { display: none; padding: 20px; padding-bottom: 90px; }
-        .active { display: block; animation: slideUp 0.3s ease; }
+        .page { display: none; padding: 20px; padding-bottom: 110px; animation: slideUp 0.4s ease; }
+        .active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Duyuru Panosu */
-        .announcement {
-            background: rgba(0, 136, 204, 0.1);
-            border-left: 4px solid var(--accent);
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            font-size: 13px;
-        }
+        /* Modern Glassmorphism Header */
+        .header { background: linear-gradient(135deg, #1a1a1a, #000); border-radius: 25px; padding: 25px; text-align: center; border: 1px solid #333; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .header::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(0,136,204,0.1) 0%, transparent 70%); }
+        .user-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--accent); position: relative; z-index: 1; }
 
-        /* Profil Kısmı */
-        .profile-box {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #333;
-            margin-bottom: 20px;
-        }
-        .user-img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--accent); margin-bottom: 10px; }
+        /* Yeni: İstatistik Çubukları */
+        .stats-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        .stat-item { flex: 1; background: var(--card); padding: 12px; border-radius: 15px; border: 1px solid #222; font-size: 12px; }
+        .stat-item span { display: block; font-size: 16px; font-weight: bold; color: var(--accent); }
 
-        /* Modern Butonlar */
-        .action-list { display: grid; gap: 10px; }
-        .action-btn {
-            background: var(--card-bg);
-            padding: 18px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: #fff;
-            border: 1px solid #2a2a2a;
-        }
-        .action-btn i { width: 35px; color: var(--accent); font-size: 18px; }
-        .action-btn .text { flex: 1; font-weight: 500; }
+        /* Premium Kartı Animasyonlu */
+        .vip-card { background: linear-gradient(45deg, #1a1a1a, #2c3e50); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 15px; position: relative; }
+        .vip-card.active { border-color: var(--accent); }
 
-        /* Alt Menü */
-        .navbar {
-            position: fixed; bottom: 0; width: 100%;
-            background: rgba(20, 20, 20, 0.95);
-            display: flex; justify-content: space-around;
-            padding: 12px 0; border-top: 1px solid #333;
-            backdrop-filter: blur(10px);
-        }
-        .nav-link { color: #666; text-decoration: none; font-size: 10px; text-align: center; transition: 0.3s; }
-        .nav-link i { font-size: 20px; display: block; margin-bottom: 4px; }
-        .nav-link.active { color: var(--accent); }
+        /* Admin Paneli Özel */
+        .admin-box { background: #1a1010; border: 1px solid var(--danger); border-radius: 15px; padding: 15px; margin-bottom: 15px; }
+        .admin-btn { width: 100%; padding: 12px; background: var(--danger); border: none; border-radius: 10px; color: white; font-weight: bold; margin-top: 10px; cursor: pointer; }
+
+        /* Alt Navigasyon (Ultra Modern) */
+        .navbar { position: fixed; bottom: 15px; left: 15px; right: 15px; background: rgba(18, 18, 18, 0.9); border-radius: 25px; display: flex; justify-content: space-around; padding: 12px 0; border: 1px solid #333; backdrop-filter: blur(15px); z-index: 1000; }
+        .nav-link { color: #555; text-decoration: none; font-size: 10px; text-align: center; transition: 0.3s; }
+        .nav-link i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .nav-link.active { color: var(--accent); transform: translateY(-5px); }
+
+        /* Butonlar */
+        .action-btn { background: var(--card); padding: 18px; border-radius: 18px; display: flex; align-items: center; border: 1px solid #222; margin-bottom: 12px; transition: 0.2s; cursor: pointer; }
+        .action-btn:active { background: #1a1a1a; transform: scale(0.97); }
     </style>
 </head>
 <body>
 
     <div id="p-home" class="page active">
-        <div class="announcement">
-            🚀 <strong>Duyuru:</strong> VIP üyeliklerde %50 indirim başladı! Son gün 15 Mart.
-        </div>
-        
-        <div class="profile-box">
-            <img id="p-img" src="" class="user-img">
-            <h3 id="p-name" style="margin:0;">...</h3>
-            <p id="p-status" style="color:var(--accent); font-size: 12px; margin:5px 0;">STANDART KULLANICI</p>
+        <div class="header">
+            <img id="u-img" src="" class="user-img">
+            <h2 id="u-name" style="margin:10px 0 5px 0;">...</h2>
+            <div style="font-size: 12px; color: var(--accent); font-weight: bold; letter-spacing: 1px;">BATUWEBS ELITE</div>
         </div>
 
-        <div class="action-list">
-            <a href="#" class="action-btn" onclick="openLink('https://t.me/batuWebsTR')">
-                <i class="fas fa-cloud-download-alt"></i>
-                <div class="text">Dosya Arşivi</div>
-                <i class="fas fa-chevron-right" style="font-size:12px; color:#444;"></i>
-            </a>
-            <a href="#" class="action-btn" onclick="openLink('https://t.me/eticaretnedir')">
-                <i class="fas fa-shopping-bag"></i>
-                <div class="text">E-Ticaret Platformu</div>
-                <i class="fas fa-chevron-right" style="font-size:12px; color:#444;"></i>
-            </a>
+        <div class="stats-bar">
+            <div class="stat-item">LİMİT<span>2 / 2</span></div>
+            <div class="stat-item">PUAN<span>150</span></div>
+            <div class="stat-item">ÜYELİK<span>STANDART</span></div>
+        </div>
+
+        <div class="action-btn" onclick="tg.openLink('https://t.me/batuWebsTR')">
+            <i class="fas fa-folder-tree" style="width:40px; color:var(--accent);"></i>
+            <div style="flex:1"><b>Dosya Merkezi</b><br><small style="color:#666">Hızlı indirme linkleri</small></div>
+            <i class="fas fa-arrow-right" style="color:#333"></i>
+        </div>
+        
+        <div class="action-btn" onclick="tg.openLink('https://t.me/eticaretnedir')">
+            <i class="fas fa-store" style="width:40px; color:var(--accent);"></i>
+            <div style="flex:1"><b>E-Ticaret Kurs</b><br><small style="color:#666">Satış odaklı eğitimler</small></div>
+            <i class="fas fa-arrow-right" style="color:#333"></i>
         </div>
     </div>
 
-    <div id="p-settings" class="page">
-        <h3>Ayarlar & Bilgi</h3>
-        <div class="profile-box" style="text-align:left;">
-            <p>💾 <strong>Önbelleği Temizle:</strong> Verileri sıfırla</p>
-            <p>📜 <strong>Kullanım Şartları:</strong> BatuWebs kural ve şartları</p>
+    <div id="p-vip" class="page">
+        <h3 style="margin-top:0"><i class="fas fa-gem" style="color:var(--gold)"></i> Üyelik Yükselt</h3>
+        <div class="vip-card">
+            <div style="display:flex; justify-content:space-between">
+                <span><b>AYLIK VIP</b><br><small>Sınırsız İndirme</small></span>
+                <span style="color:var(--gold); font-weight:bold">50 Yıldız</span>
+            </div>
+            <button style="width:100%; margin-top:15px; padding:10px; border-radius:10px; border:none; background:var(--gold); color:black; font-weight:bold">HEMEN AL</button>
+        </div>
+        <div class="vip-card" style="border-color:#fff">
+            <div style="display:flex; justify-content:space-between">
+                <span><b>ÖMÜR BOYU</b><br><small>Tüm İçerikler</small></span>
+                <span style="color:var(--accent); font-weight:bold">2500 Yıldız</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="p-admin" class="page">
+        <h3><i class="fas fa-user-shield"></i> Yönetici Paneli</h3>
+        <div class="admin-box">
+            <h4>📢 Sistem Duyurusu</h4>
+            <input type="text" placeholder="Mesajınızı yazın..." style="width:100%; padding:10px; border-radius:8px; border:none; background:#222; color:white;">
+            <button class="admin-btn">Tüm Kullanıcılara Gönder</button>
+        </div>
+        <div class="admin-box">
+            <h4>📊 Sunucu Bilgisi</h4>
+            <small>Aktif Kullanıcı: 1,240<br>Pydroid Durumu: Çalışıyor</small>
         </div>
     </div>
 
     <nav class="navbar">
-        <a href="javascript:void(0)" class="nav-link active" onclick="nav('p-home', this)">
-            <i class="fas fa-home"></i>Ana Sayfa
-        </a>
-        <a href="javascript:void(0)" class="nav-link" onclick="nav('p-settings', this)">
-            <i class="fas fa-cog"></i>Ayarlar
-        </a>
+        <a href="javascript:void(0)" class="nav-link active" onclick="nav('p-home', this)"><i class="fas fa-home"></i>Ev</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="nav('p-vip', this)"><i class="fas fa-crown"></i>VIP</a>
+        <a href="javascript:void(0)" id="admin-tab" class="nav-link" style="display:none" onclick="nav('p-admin', this)"><i class="fas fa-lock"></i>Yönetim</a>
     </nav>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
         
-        // Kullanıcı Bilgileri
-        document.getElementById('p-name').innerText = tg.initDataUnsafe.user.first_name;
-        document.getElementById('p-img').src = tg.initDataUnsafe.user.photo_url || 'https://via.placeholder.com/70';
+        // Verileri Yükle
+        const user = tg.initDataUnsafe.user;
+        document.getElementById('u-name').innerText = user.first_name + ' ' + (user.last_name || '');
+        document.getElementById('u-img').src = user.photo_url || 'https://via.placeholder.com/90';
 
-        function nav(page, el) {
+        // Admin Kontrolü
+        if(user.id === 8795833691) {
+            document.getElementById('admin-tab').style.display = 'block';
+        }
+
+        function nav(id, el) {
             tg.HapticFeedback.impactOccurred('medium');
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-            document.getElementById(page).classList.add('active');
+            document.getElementById(id).classList.add('active');
             el.classList.add('active');
-        }
-
-        function openLink(url) {
-            tg.openLink(url);
         }
     </script>
 </body>
