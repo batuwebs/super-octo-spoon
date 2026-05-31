@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+:root{ --bg:#0b0c10; --card:#12141b; --primary:#ff6b8b; --text:#ffffff; --muted:#9da3b4; --border:rgba(255,255,255,.08); }
+*{ margin:0; padding:0; box-sizing:border-box; font-family:Inter,sans-serif; }
+body{ background:#090a0d; color:var(--text); min-height:100vh; }
+.container{ max-width:420px; margin:0 auto; padding:20px; padding-top:40px; }
+.hero h1{ font-size:28px; font-weight:800; margin-bottom:10px; }
+.hero p{ color:var(--muted); font-size:14px; margin-bottom:20px; }
+.card{ background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:24px; padding:24px; }
+.label{ font-size:13px; font-weight:600; margin-bottom:10px; color:var(--muted); }
+input{ width:100%; height:52px; background:#0e1016; border:1px solid var(--border); border-radius:14px; padding:0 16px; color:white; font-size:16px; outline:none; transition:.3s; }
+input:focus{ border-color:var(--primary); }
+.btn{ width:100%; height:52px; border:none; cursor:pointer; margin-top:16px; border-radius:14px; font-weight:700; color:white; background:var(--primary); transition:.2s; }
+.btn:active{ transform:scale(.98); }
+.preview{ margin-top:24px; background:var(--card); border-radius:20px; overflow:hidden; border:1px solid var(--border); }
+canvas{ width:100%; display:block; }
+.actions{ display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+.outline{ height:50px; background:transparent; border:1px solid rgba(255,255,255,.1); color:white; border-radius:14px; font-weight:600; cursor:pointer; }
+.hidden{ display:none; }
+.toast{ position:fixed; bottom:20px; left:20px; right:20px; background:#1c1e26; padding:15px; border-radius:12px; text-align:center; border:1px solid var(--border); animation:fadeUp .3s; }
+@keyframes fadeUp{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+.footerText{ margin-top:20px; text-align:center; font-size:12px; color:#5d6273; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div id="home">
+        <div class="hero">
+            <h3>Dünyanın en güzel kızı Belgesi</h3>
+        </div>
+        <div class="card">
+            <div class="label">İsim</div>
+            <input id="nameInput" maxlength="25" placeholder="İsim giriniz..." autocomplete="off">
+            <button class="btn" onclick="createCertificate()">Belge Oluştur</button>
+        </div>
+        <div class="footerText">İsim soyisim yerine sadece isim yazmanız yazınızı daha güzel gösterir.</div>
+    </div>
+    
+    <div id="result" class="hidden">
+        <div class="preview"><canvas id="canvas"></canvas></div>
+        <div class="actions">
+            <button class="outline" onclick="downloadImage()">İndir</button>
+            <button class="outline" onclick="goBack()">Geri Dön</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById("canvas"), ctx = canvas.getContext("2d");
+const TEMPLATE = "https://batuwebs.github.io/super-octo-spoon/Mbo-belge007.png";
+
+function showToast(msg) {
+    const t = document.createElement("div"); t.className = "toast"; t.innerText = msg;
+    document.body.appendChild(t); setTimeout(() => t.remove(), 2000);
+}
+
+async function createCertificate() {
+    const value = document.getElementById("nameInput").value.trim();
+    if(!value) return showToast("Lütfen bir isim giriniz.");
+
+    const img = new Image(); img.crossOrigin = "anonymous";
+    img.onload = () => {
+        canvas.width = img.width; canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        const text = value.split("").join(" ");
+        let size = 35; ctx.font = `italic bold ${size}px 'Cormorant Garamond'`;
+        ctx.fillStyle = "#1f1e1b"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(text, 906, 497);
+        document.getElementById("home").classList.add("hidden");
+        document.getElementById("result").classList.remove("hidden");
+    };
+    img.src = TEMPLATE;
+}
+
+function downloadImage() {
+    const a = document.createElement("a");
+    a.href = canvas.toDataURL("image/png");
+    a.download = "belgem.png"; a.click();
+    showToast("Belge indiriliyor...");
+}
+
+function goBack() {
+    document.getElementById("result").classList.add("hidden");
+    document.getElementById("home").classList.remove("hidden");
+}
+</script>
+</body>
+</html>
