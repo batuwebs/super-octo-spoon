@@ -3,91 +3,469 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,700&display=swap" rel="stylesheet">
+<title>Dünyanın En Güzel Kızı</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,700&display=swap" rel="stylesheet">
 <style>
-:root{ --bg:#0b0c10; --card:#12141b; --primary:#ff6b8b; --text:#ffffff; --muted:#9da3b4; --border:rgba(255,255,255,.08); }
-*{ margin:0; padding:0; box-sizing:border-box; font-family:Inter,sans-serif; }
-body{ background:#090a0d; color:var(--text); min-height:100vh; }
-.container{ max-width:420px; margin:0 auto; padding:20px; padding-top:40px; }
-.hero h1{ font-size:28px; font-weight:800; margin-bottom:10px; }
-.hero p{ color:var(--muted); font-size:14px; margin-bottom:20px; }
-.card{ background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:24px; padding:24px; }
-.label{ font-size:13px; font-weight:600; margin-bottom:10px; color:var(--muted); }
-input{ width:100%; height:52px; background:#0e1016; border:1px solid var(--border); border-radius:14px; padding:0 16px; color:white; font-size:16px; outline:none; transition:.3s; }
-input:focus{ border-color:var(--primary); }
-.btn{ width:100%; height:52px; border:none; cursor:pointer; margin-top:16px; border-radius:14px; font-weight:700; color:white; background:var(--primary); transition:.2s; }
-.btn:active{ transform:scale(.98); }
-.preview{ margin-top:24px; background:var(--card); border-radius:20px; overflow:hidden; border:1px solid var(--border); }
-canvas{ width:100%; display:block; }
-.actions{ display:flex; flex-direction:column; gap:12px; margin-top:20px; }
-.outline{ height:50px; background:transparent; border:1px solid rgba(255,255,255,.1); color:white; border-radius:14px; font-weight:600; cursor:pointer; }
-.hidden{ display:none; }
-.toast{ position:fixed; bottom:20px; left:20px; right:20px; background:#1c1e26; padding:15px; border-radius:12px; text-align:center; border:1px solid var(--border); animation:fadeUp .3s; }
-@keyframes fadeUp{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
-.footerText{ margin-top:20px; text-align:center; font-size:12px; color:#5d6273; }
+  :root {
+    --bg: #0d0d0f;
+    --card: #1a1a1f;
+    --primary: #ff5c7f;
+    --primary-glow: rgba(255, 92, 127, 0.25);
+    --text: #f5f5f7;
+    --muted: #8e8e93;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .screen {
+    width: 100%;
+    max-width: 430px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px 36px;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    min-height: 24px;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+  }
+
+  .site-title {
+    margin: 8px 0 20px;
+    padding-left: 4px;
+  }
+  .site-title h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .site-title h1 span {
+    background: linear-gradient(135deg, #ff5c7f, #ff9a8b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .badge-pending {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 92, 127, 0.12);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .badge-pending .pulse {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,92,127,0.5); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 4px rgba(255,92,127,0); }
+  }
+
+  .badge-done {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(50,215,100,0.12);
+    color: #32d764;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .badge-done::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #32d764;
+    box-shadow: 0 0 6px #32d764;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 20px;
+  }
+
+  .field-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+
+  .input-wrap { position: relative; }
+  .input-wrap svg {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 17px; height: 17px;
+    fill: var(--muted);
+    pointer-events: none;
+    transition: fill 0.2s;
+  }
+  input {
+    width: 100%;
+    height: 52px;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 0 16px 0 42px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  }
+  input::placeholder { color: #4a4a55; }
+  input:focus {
+    border-color: var(--primary);
+    background: rgba(255,92,127,0.05);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+  }
+  .input-wrap:focus-within svg { fill: var(--primary); }
+
+  .hint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    padding-left: 4px;
+    line-height: 1.5;
+  }
+
+  .btn {
+    width: 100%;
+    height: 54px;
+    border: none;
+    cursor: pointer;
+    margin-top: 18px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    background: linear-gradient(135deg, #ff5c7f 0%, #ff8c6b 100%);
+    box-shadow: 0 6px 24px rgba(255,92,127,0.35);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .btn:hover { opacity: 0.92; }
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.75; cursor: not-allowed; transform: none; }
+
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2.5px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+    display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .btn.loading .spinner { display: block; }
+
+  .preview {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--card);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    margin-top: 8px;
+  }
+  canvas { width: 100%; display: block; }
+
+  .result-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .result-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .actions { display: flex; gap: 12px; margin-top: 6px; }
+  .action-btn {
+    flex: 1;
+    height: 52px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+    border: none;
+  }
+  .action-btn:active { transform: scale(0.97); }
+  .action-download {
+    background: linear-gradient(135deg, #ff5c7f, #ff8c6b);
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(255,92,127,0.3);
+  }
+  .action-back {
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid var(--border) !important;
+    color: var(--text);
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #4a4a55;
+    margin-top: 24px;
+    line-height: 1.6;
+    padding: 0 4px;
+  }
+
+  .blocked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    text-align: center;
+    gap: 16px;
+  }
+  .blocked-icon { font-size: 48px; margin-bottom: 8px; }
+  .blocked h2 { font-size: 20px; font-weight: 800; color: var(--text); }
+  .blocked p { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 280px; }
+
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2028;
+    border: 1px solid var(--border);
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    white-space: nowrap;
+    animation: fadeUp 0.3s ease;
+    z-index: 999;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  .hidden { display: none !important; }
+
+  .home-indicator {
+    width: 100%;
+    max-width: 430px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 6px;
+  }
+  .home-indicator div {
+    width: 134px;
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+  }
 </style>
 </head>
 <body>
-<div class="container">
-    <div id="home">
-        <div class="hero">
-            <h3>Dünyanın en güzel kızı Belgesi</h3>
-        </div>
-        <div class="card">
-            <div class="label">İsim</div>
-            <input id="nameInput" maxlength="25" placeholder="İsim giriniz..." autocomplete="off">
-            <button class="btn" onclick="createCertificate()">Belge Oluştur</button>
-        </div>
-        <div class="footerText">İsim soyisim yerine sadece isim yazmanız yazınızı daha güzel gösterir.</div>
+
+<div class="screen">
+
+  <!-- HOME -->
+  <div id="home">
+    <div class="nav">
+      <div class="nav-dot"></div>
     </div>
-    
-    <div id="result" class="hidden">
-        <div class="preview"><canvas id="canvas"></canvas></div>
-        <div class="actions">
-            <button class="outline" onclick="downloadImage()">İndir</button>
-            <button class="outline" onclick="goBack()">Geri Dön</button>
-        </div>
+
+    <div class="site-title">
+      <h1>Dünyanın En<br><span>Güzel Kızı</span></h1>
     </div>
+
+    <div class="card">
+      <div class="field-label">Ad Soyad</div>
+      <div class="input-wrap">
+        <input id="nameInput" maxlength="25" placeholder="İsim giriniz..." autocomplete="off">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+      <p class="hint">Sadece isim yazmanız yazı görünümünü iyileştirir.</p>
+      <button class="btn" id="createBtn" onclick="createCertificate()">
+        <div class="spinner"></div>
+        <span class="btn-text">Belge Oluştur →</span>
+      </button>
+    </div>
+
+    <p class="footer">Sevdiğiniz kişi ya da arkadaşınız için<br>oluşturabileceğiniz harika bir Mbo tarzı belge.</p>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="hidden">
+    <div class="nav" id="resultNav"></div>
+
+    <div class="preview">
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="result-label">İşlemler</div>
+
+    <div class="actions">
+      <button class="action-btn action-download" onclick="downloadImage()">⬇ İndir</button>
+      <button class="action-btn action-back" onclick="goBack()">← Geri Dön</button>
+    </div>
+
+    <div class="footer" style="margin-top:20px;">Belgeyi indirerek paylaşabilirsiniz.</div>
+  </div>
+
 </div>
 
+<div class="home-indicator"><div></div></div>
+
 <script>
-const canvas = document.getElementById("canvas"), ctx = canvas.getContext("2d");
-const TEMPLATE = "https://batuwebs.github.io/super-octo-spoon/Mbo-belge007.png";
+  // ── Token Kontrolü ──────────────────────────────────────────
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token !== "MboStart919f7Start") {
+      document.body.innerHTML = `
+        <div class="blocked">
+          <div class="blocked-icon">🔒</div>
+          <h2>Erişim Reddedildi</h2>
+          <p>Bu sayfaya erişmek için geçerli bir bağlantıya ihtiyacınız var.</p>
+        </div>`;
+    }
+  })();
+  // ────────────────────────────────────────────────────────────
 
-function showToast(msg) {
-    const t = document.createElement("div"); t.className = "toast"; t.innerText = msg;
-    document.body.appendChild(t); setTimeout(() => t.remove(), 2000);
-}
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas && canvas.getContext("2d");
+  const TEMPLATE = "https://batuwebs.github.io/super-octo-spoon/Mbo-belge007.png";
 
-async function createCertificate() {
+  function showToast(msg) {
+    document.querySelectorAll('.toast').forEach(t => t.remove());
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.innerText = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2200);
+  }
+
+  function setNavBadge(state) {
+    const nav = document.getElementById("resultNav");
+    if (!nav) return;
+    if (state === "pending") {
+      nav.innerHTML = `<span class="badge-pending"><span class="pulse"></span>Oluşturma Aşamasında</span>`;
+    } else {
+      nav.innerHTML = `<span class="badge-done">Oluşturuldu</span>`;
+    }
+  }
+
+  function setLoading(on) {
+    const btn = document.getElementById("createBtn");
+    if (!btn) return;
+    if (on) {
+      btn.classList.add("loading");
+      btn.disabled = true;
+      btn.querySelector(".btn-text").textContent = "Yükleniyor...";
+    } else {
+      btn.classList.remove("loading");
+      btn.disabled = false;
+      btn.querySelector(".btn-text").textContent = "Belge Oluştur →";
+    }
+  }
+
+  async function createCertificate() {
     const value = document.getElementById("nameInput").value.trim();
-    if(!value) return showToast("Lütfen bir isim giriniz.");
+    if (!value) return showToast("Lütfen bir isim giriniz.");
 
-    const img = new Image(); img.crossOrigin = "anonymous";
+    setLoading(true);
+    setNavBadge("pending");
+
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("result").classList.remove("hidden");
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
     img.onload = () => {
-        canvas.width = img.width; canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        const text = value.split("").join(" ");
-        let size = 35; ctx.font = `italic bold ${size}px 'Cormorant Garamond'`;
-        ctx.fillStyle = "#1f1e1b"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-        ctx.fillText(text, 906, 497);
-        document.getElementById("home").classList.add("hidden");
-        document.getElementById("result").classList.remove("hidden");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      const text = value.split("").join(" ");
+      ctx.font = `italic bold 35px 'Cormorant Garamond'`;
+      ctx.fillStyle = "#1f1e1b";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, 906, 497);
+      setLoading(false);
+      setNavBadge("done");
+    };
+    img.onerror = () => {
+      setLoading(false);
+      setNavBadge("done");
+      showToast("Belge yüklenemedi, tekrar deneyin.");
     };
     img.src = TEMPLATE;
-}
+  }
 
-function downloadImage() {
+  function downloadImage() {
     const a = document.createElement("a");
     a.href = canvas.toDataURL("image/png");
-    a.download = "belgem.png"; a.click();
-    showToast("Belge indiriliyor...");
-}
+    a.download = "belgem.png";
+    a.click();
+    showToast("Belge indiriliyor…");
+  }
 
-function goBack() {
+  function goBack() {
     document.getElementById("result").classList.add("hidden");
     document.getElementById("home").classList.remove("hidden");
-}
+  }
 </script>
 </body>
 </html>
