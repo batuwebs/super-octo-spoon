@@ -1,0 +1,26 @@
+{
+  "belgeOlusturucu": [
+    { "sira": 1, "etiketi": "Buton", "butonAdi": "Diploma", "butonLinki": "/belge/1" },
+    { "sira": 2, "etiketi": "Buton", "butonAdi": "Piyango", "butonLinki": "/belge/2" },
+    { "sira": 3, "etiketi": "Buton", "butonAdi": "Şanslı", "butonLinki": "/belge/3" },
+    { "sira": 4, "etiketi": "Buton", "butonAdi": "Erken Kalkma", "butonLinki": "/belge/4" },
+    { "sira": 5, "etiketi": "Buton", "butonAdi": "Erteleyici", "butonLinki": "/belge/5" },
+    { "sira": 6, "etiketi": "Buton", "butonAdi": "Bilgi Uzmanı", "butonLinki": "/belge/6" },
+    { "sira": 7, "etiketi": "Buton", "butonAdi": "Mutfak", "butonLinki": "/belge/7" },
+    { "sira": 8, "etiketi": "Buton", "butonAdi": "Uykucu", "butonLinki": "/belge/8" },
+    { "sira": 9, "etiketi": "Buton", "butonAdi": "Çay Tiryakisi", "butonLinki": "/belge/9" },
+    { "sira": 10, "etiketi": "Buton", "butonAdi": "İnternet", "butonLinki": "/belge/10" }
+  ],
+  "testUygulamalari": [
+    { "sira": 11, "etiketi": "Bağlantı", "butonAdi": "Sevgili Testi", "butonLinki": "/test/1" },
+    { "sira": 12, "etiketi": "Bağlantı", "butonAdi": "Aşk Ölçer", "butonLinki": "/test/2" },
+    { "sira": 13, "etiketi": "Bağlantı", "butonAdi": "Yemek Testi", "butonLinki": "/test/3" },
+    { "sira": 14, "etiketi": "Bağlantı", "butonAdi": "Şans Ölçer", "butonLinki": "/test/4" },
+    { "sira": 15, "etiketi": "Bağlantı", "butonAdi": "Ünlü Sensin", "butonLinki": "/test/5" },
+    { "sira": 16, "etiketi": "Bağlantı", "butonAdi": "Yalan Makinesi", "butonLinki": "/test/6" },
+    { "sira": 17, "etiketi": "Bağlantı", "butonAdi": "Zeka Testi", "butonLinki": "/test/7" },
+    { "sira": 18, "etiketi": "Bağlantı", "butonAdi": "Sabır Ölçer", "butonLinki": "/test/8" },
+    { "sira": 19, "etiketi": "Bağlantı", "butonAdi": "Hayvan Testi", "butonLinki": "/test/9" },
+    { "sira": 20, "etiketi": "Bağlantı", "butonAdi": "Gelecek Testi", "butonLinki": "/test/10" }
+  ]
+}
