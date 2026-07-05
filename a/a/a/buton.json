@@ -12,8 +12,8 @@
     { "sira": 10, "etiketi": "Buton", "butonAdi": "İnternet", "butonLinki": "/belge/10" }
   ],
   "testUygulamalari": [
-    { "sira": 1, "etiketi": "Bağlantı", "butonAdi": "Sevgi ölçer oluştur", "butonLinki": "https://mbo-apps.vercel.app/ask/create.html" },
-    { "sira": 2, "etiketi": "Bağlantı", "butonAdi": "Eşcinsellik Testi", "butonLinki": "/test/2" },
+    { "sira": 11, "etiketi": "Bağlantı", "butonAdi": "Sevgi ölçer oluştur", "butonLinki": "https://mbo-apps.vercel.app/ask/create.html" },
+    { "sira": 12, "etiketi": "Bağlantı", "butonAdi": "Eşcinsellik Testi", "butonLinki": "/test/2" },
    
   ]
 }
