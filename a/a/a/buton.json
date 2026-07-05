@@ -12,15 +12,8 @@
     { "sira": 10, "etiketi": "Buton", "butonAdi": "İnternet", "butonLinki": "/belge/10" }
   ],
   "testUygulamalari": [
-    { "sira": 11, "etiketi": "Bağlantı", "butonAdi": "Sevgi ölçer oluştur", "butonLinki": "https://mbo-apps.vercel.app/ask/create.html" },
-    { "sira": 12, "etiketi": "Bağlantı", "butonAdi": "Aşmmk Ölçer", "butonLinki": "/test/2" },
-    { "sira": 13, "etiketi": "Bağlantı", "butonAdi": "Yemek Testi", "butonLinki": "/test/3" },
-    { "sira": 14, "etiketi": "Bağlantı", "butonAdi": "Şans Ölçer", "butonLinki": "/test/4" },
-    { "sira": 15, "etiketi": "Bağlantı", "butonAdi": "Ünlü Sensin", "butonLinki": "/test/5" },
-    { "sira": 16, "etiketi": "Bağlantı", "butonAdi": "Yalan Makinesi", "butonLinki": "/test/6" },
-    { "sira": 17, "etiketi": "Bağlantı", "butonAdi": "Zeka Testi", "butonLinki": "/test/7" },
-    { "sira": 18, "etiketi": "Bağlantı", "butonAdi": "Sabır Ölçer", "butonLinki": "/test/8" },
-    { "sira": 19, "etiketi": "Bağlantı", "butonAdi": "Hayvan Testi", "butonLinki": "/test/9" },
-    { "sira": 20, "etiketi": "Bağlantı", "butonAdi": "Gelecek Testi", "butonLinki": "/test/10" }
+    { "sira": 1, "etiketi": "Bağlantı", "butonAdi": "Sevgi ölçer oluştur", "butonLinki": "https://mbo-apps.vercel.app/ask/create.html" },
+    { "sira": 2, "etiketi": "Bağlantı", "butonAdi": "Eşcinsellik Testi", "butonLinki": "/test/2" },
+   
   ]
 }
