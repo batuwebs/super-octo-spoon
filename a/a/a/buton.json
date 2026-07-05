@@ -13,7 +13,7 @@
   ],
   "testUygulamalari": [
     { "sira": 11, "etiketi": "Bağlantı", "butonAdi": "Sevgi ölçer oluştur", "butonLinki": "https://mbo-apps.vercel.app/ask/create.html" },
-    { "sira": 12, "etiketi": "Bağlantı", "butonAdi": "Arkadaşın Gaymi ?", "butonLinki": "/test/2" },
+    { "sira": 12, "etiketi": "Bağlantı", "butonAdi": "Arkadaşın Gaymi ?", "butonLinki": "https://mbo-apps.vercel.app/gay" },
     { "sira": 13, "etiketi": "Bağlantı", "butonAdi": "Yemek Testi", "butonLinki": "/test/3" },
     { "sira": 14, "etiketi": "Bağlantı", "butonAdi": "Şans Ölçer", "butonLinki": "/test/4" },
     { "sira": 15, "etiketi": "Bağlantı", "butonAdi": "Ünlü Sensin", "butonLinki": "/test/5" },
