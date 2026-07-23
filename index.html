@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0c0c0d" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="description" content="Maaş ve harcama takibi için çevrimdışı çalışan kişisel PWA." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Sarı Pipisi" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Batu'nun Sarı Pipisi</title>
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow" id="pageEyebrow">Kişisel cüzdan</p>
+        <h1 id="pageTitle">Ana Sayfa</h1>
+      </div>
+      <button class="icon-button avatar-button" id="privacyButton" type="button" aria-label="Bakiyeyi gizle veya göster">
+        <span class="avatar-mark">B</span>
+      </button>
+    </header>
+
+    <main class="main-content">
+      <section class="page active" id="homePage" data-page="home" aria-labelledby="pageTitle">
+        <article class="balance-card">
+          <div class="balance-glow" aria-hidden="true"></div>
+          <div class="balance-head">
+            <div>
+              <span class="balance-label">Maaş bakiyesi</span>
+              <button class="balance-value" id="editSalaryButton" type="button" aria-label="Maaş bakiyesini düzenle">
+                <span id="balanceAmount">₺0,00</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
+              </button>
+              <span class="salary-date" id="salaryDateLabel">Maaş tarihi ayarlanmadı</span>
+            </div>
+            <div class="balance-chip" id="balanceStatus">Hazır</div>
+          </div>
+
+          <div class="money-actions">
+            <button class="money-action expense" id="expenseButton" type="button">
+              <span class="money-action-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+              </span>
+              <span><strong>Harcama</strong><small>Bakiyeden düş</small></span>
+            </button>
+            <button class="money-action income" id="incomeButton" type="button">
+              <span class="money-action-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              </span>
+              <span><strong>Kazanç</strong><small>Bakiyeye ekle</small></span>
+            </button>
+          </div>
+        </article>
+
+        <section class="summary-strip" aria-label="Aylık özet">
+          <div class="summary-item">
+            <span class="summary-icon income-dot"></span>
+            <div><small>Bu ay gelen</small><strong id="monthIncome">₺0,00</strong></div>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-item">
+            <span class="summary-icon expense-dot"></span>
+            <div><small>Bu ay giden</small><strong id="monthExpense">₺0,00</strong></div>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p>Hareketler</p>
+              <h2>Son işlemler</h2>
+            </div>
+            <button class="text-button" type="button" data-nav-target="history">Tümünü gör</button>
+          </div>
+          <div class="transaction-list compact" id="recentTransactions"></div>
+        </section>
+      </section>
+
+      <section class="page" id="historyPage" data-page="history" aria-labelledby="pageTitle">
+        <div class="history-toolbar">
+          <label class="search-field">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.7-3.7"/></svg>
+            <input id="historySearch" type="search" inputmode="search" autocomplete="off" placeholder="Açıklama veya tutar ara" />
+            <button class="clear-search" id="clearSearchButton" type="button" aria-label="Aramayı temizle" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+            </button>
+          </label>
+          <div class="filter-row" role="group" aria-label="İşlem filtresi">
+            <button class="filter-chip active" type="button" data-filter="all">Tümü</button>
+            <button class="filter-chip" type="button" data-filter="expense">Harcamalar</button>
+            <button class="filter-chip" type="button" data-filter="income">Kazançlar</button>
+          </div>
+        </div>
+
+        <div class="history-meta">
+          <span id="historyResultCount">0 işlem</span>
+          <button class="sort-button" id="sortButton" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h9M8 18h5M3 5v14m0 0-2-2m2 2 2-2"/></svg>
+            <span id="sortLabel">En yeni</span>
+          </button>
+        </div>
+
+        <div class="transaction-list" id="historyTransactions"></div>
+        <nav class="pagination" id="pagination" aria-label="Geçmiş sayfaları"></nav>
+      </section>
+
+      <section class="page" id="settingsPage" data-page="settings" aria-labelledby="pageTitle">
+        <section class="settings-hero">
+          <div class="settings-logo">₺</div>
+          <div>
+            <h2>Batu'nun Sarı Pipisi</h2>
+            <p>Veriler yalnızca bu cihazda tutulur.</p>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <div class="settings-group-title"><span>Yedekleme</span><small>JSON ile taşı</small></div>
+          <button class="setting-row" id="exportButton" type="button">
+            <span class="setting-icon yellow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 19h14"/></svg></span>
+            <span class="setting-copy"><strong>gecmis.json indir</strong><small>Tüm işlemleri yedekle</small></span>
+            <svg class="row-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+          <button class="setting-row" id="importButton" type="button">
+            <span class="setting-icon green"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17V5m0 0 4 4m-4-4L8 9"/><path d="M5 19h14"/></svg></span>
+            <span class="setting-copy"><strong>gecmis.json yükle</strong><small>Var olanların üstüne yazmadan birleştir</small></span>
+            <svg class="row-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+          <input id="importFileInput" type="file" accept="application/json,.json" hidden />
+        </section>
+
+        <section class="settings-group">
+          <div class="settings-group-title"><span>Görünüm ve kullanım</span><small>Kişiselleştir</small></div>
+          <label class="setting-row toggle-row">
+            <span class="setting-icon violet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a7 7 0 1 0 9 9 6 6 0 0 1-9-9Z"/></svg></span>
+            <span class="setting-copy"><strong>Tam siyah tema</strong><small>OLED ekranlarda daha koyu görünüm</small></span>
+            <input id="oledToggle" type="checkbox" role="switch" />
+            <span class="switch-ui" aria-hidden="true"></span>
+          </label>
+          <label class="setting-row toggle-row">
+            <span class="setting-icon blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 18a4 4 0 0 1 0-8M16 6a4 4 0 0 1 0 8"/><path d="M8 6v12M16 6v12"/></svg></span>
+            <span class="setting-copy"><strong>Dokunma titreşimi</strong><small>Desteklenen cihazlarda kısa geri bildirim</small></span>
+            <input id="hapticToggle" type="checkbox" role="switch" />
+            <span class="switch-ui" aria-hidden="true"></span>
+          </label>
+          <button class="setting-row" id="installButton" type="button">
+            <span class="setting-icon orange"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><rect x="4" y="3" width="16" height="18" rx="3"/></svg></span>
+            <span class="setting-copy"><strong>Uygulamayı ana ekrana ekle</strong><small id="installDescription">PWA olarak kur</small></span>
+            <svg class="row-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </section>
+
+        <section class="settings-group danger-group">
+          <div class="settings-group-title"><span>Veri yönetimi</span><small>Dikkatli kullan</small></div>
+          <button class="setting-row" id="resetButton" type="button">
+            <span class="setting-icon red"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13"/></svg></span>
+            <span class="setting-copy"><strong>Tüm verileri sıfırla</strong><small>Maaş ve işlem geçmişini kalıcı sil</small></span>
+            <svg class="row-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </section>
+
+        <p class="app-version">Sürüm 1.0.0 · Çevrimdışı çalışır</p>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Ana menü">
+      <button class="nav-item active" type="button" data-nav="home" aria-current="page">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></svg>
+        <span>Ana Sayfa</span>
+      </button>
+      <button class="nav-item" type="button" data-nav="history">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>
+        <span>Geçmiş</span>
+      </button>
+      <button class="nav-item" type="button" data-nav="settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>
+        <span>Ayarlar</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal-sheet" id="modalSheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="modal-header">
+        <div><p id="modalKicker">İşlem</p><h2 id="modalTitle">Yeni işlem</h2></div>
+        <button class="icon-button close-modal" id="closeModalButton" type="button" aria-label="Pencereyi kapat">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div id="modalContent"></div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <template id="emptyStateTemplate">
+    <div class="empty-state">
+      <div class="empty-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4zM7 4h10v3M8 12h8"/></svg></div>
+      <h3>Henüz işlem yok</h3>
+      <p>İlk harcama veya kazancını eklediğinde burada görünecek.</p>
+    </div>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

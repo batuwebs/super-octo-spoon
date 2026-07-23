@@ -1,0 +1,21 @@
+{
+  "name": "Batu'nun Sarı Pipisi",
+  "short_name": "Sarı Pipisi",
+  "description": "Maaş, harcama ve kazanç takibi için çevrimdışı PWA.",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0c0c0d",
+  "theme_color": "#0c0c0d",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Ana Sayfa", "short_name": "Ana Sayfa", "url": "./#home", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Geçmiş", "short_name": "Geçmiş", "url": "./#history", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
